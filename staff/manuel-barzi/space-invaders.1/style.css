@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+}
+
+#space {
+  background-color: black;
+  width: 100vw;
+  height: 100vh;
+}
+
+#ship {
+  height: 10vh;
+  position: absolute;
+  top: 90vh;
+  left: calc(50vw - 5vh);
+  background-color: red;
+}
+
+/*# sourceMappingURL=style.css.map */
