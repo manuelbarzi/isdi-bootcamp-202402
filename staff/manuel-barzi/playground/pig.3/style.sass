@@ -1,0 +1,30 @@
+@mixin size($width, $height)
+    width: $width
+    height: $height
+
+@mixin location($left, $top)
+    left: $left
+    top: $top
+
+.pig
+    &__head
+        background-color: pink
+        @include size(10px, 10px)
+        position: relative
+
+    &__eye
+        background-color: white
+        @include size(3px, 3px)
+        position: absolute
+
+    &__eye--left
+        @include location(1px, 3px)
+
+    &__eye--right
+        @include location(6px, 3px)
+
+    &__pupil
+        background-color: black
+        @include size(1px, 1px)
+        position: absolute
+        @include location(1px, 1px)
