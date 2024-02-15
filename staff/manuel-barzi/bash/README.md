@@ -110,3 +110,9 @@ workspace/isdi-bootcamp-202402
 ```sh
 $ rm -rf workspace/helloworld
 ```
+
+## rsync -va --del <from> <to> (synchronizes all files and folders from-to)
+
+```sh
+$ rsync va --del ./pepito /Users/my-user/pepito
+```
