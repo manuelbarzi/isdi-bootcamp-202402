@@ -116,3 +116,12 @@ $ rm -rf workspace/helloworld
 ```sh
 $ rsync va --del ./pepito /Users/my-user/pepito
 ```
+
+## grep -r . -e <expression>
+
+```sh
+$ grep -r . -e pepito
+
+./staff/manuel-barzi/bash/README.md:/Users/pepito
+./staff/manuel-barzi/bash/README.md:$ rsync va --del ./pepito /Users/my-user/pepito
+```
