@@ -6,7 +6,7 @@ function map(array, callback) {
     for (var i = 0; i < array.length; i++) {
         var element = array[i]
 
-        var mappedElement = callback(element, i, array)
+        var mappedElement = callback(element)
 
         newArray[i] = mappedElement
     }
@@ -89,51 +89,3 @@ console.log(result)
 
 console.log(nums)
 // [10, 20, 30]
-
-
-console.log('CASE 5')
-
-var data = [
-    { name: 'Peter', mark: 9 },
-    { name: 'Wendy', mark: 9.6 },
-    { name: 'Pepito', mark: 6 },
-    { name: 'Campa', mark: 7 }
-]
-
-function calculateCake(element, index, array) {
-    // ex: (7/31.6 * 100).toFixed(2)
-
-    var sum = 0
-
-    for (var i = 0; i < array.length; i++) {
-        var item = array[i]
-
-        sum += item.mark
-    }
-
-    var piece = parseFloat((element.mark / sum * 100).toFixed(2))
-
-    return { name: element.name, piece: piece }
-}
-
-var cake = map(data, calculateCake)
-
-console.log(cake)
-/*
-[
-    { name: 'Peter', piece:  },
-    { name: 'Wendy', piece:  },
-    { name: 'Pepito', piece:  },
-    { name: 'Campa', piece:  }
-]
-*/
-
-console.log(data)
-/*
-[
-    { name: 'Peter', mark: 9 },
-    { name: 'Wendy', mark: 9.6 },
-    { name: 'Pepito', mark: 6 },
-    { name: 'Campa', mark: 7 }
-]
-*/
