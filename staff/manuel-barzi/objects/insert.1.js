@@ -8,13 +8,17 @@
  * @throws {TypeError} When object is not an object, or when index is not a number.
  */
 function insert(object, index, value) {
+    // TODO
     if (!(object instanceof Object)) throw new TypeError(object + ' is not an Object')
-    if (typeof index !== 'number') throw new TypeError(index + ' is not a Number')
 
-    for (var i = object.length; i > index; i--)
-        object[i] = object[i - 1]
+    // object -> { 0: 'red', 1: 'blue', 2: 'green', length: 3 }
+    // index -> 1
+    // value -> 'skyblue'
 
-    object[index] = value
+    object[3] = object[2] // { 0: 'red', 1: 'blue', 2: 'green', 3: 'green', length: 3 }
+    object[2] = object[1] // { 0: 'red', 1: 'blue', 2: 'blue', 3: 'green', length: 3 }
+
+    object[1] = value // { 0: 'red', 1: 'skyblue', 2: 'blue', 3: 'green', length: 3 }
 
     object.length++
 
@@ -53,15 +57,13 @@ var nums = {
     1: 200,
     2: 400,
     3: 500,
-    4: 600,
-    5: 700,
-    length: 6
+    length: 4
 }
 
 var length = insert(nums, 2, 300)
 
 console.log(length)
-// 7
+// 5
 
 console.log(nums)
 /*
@@ -71,9 +73,7 @@ console.log(nums)
     2: 300,
     3: 400,
     4: 500,
-    5: 600,
-    6: 700
-    length: 7
+    length: 5
 }
 */
 
