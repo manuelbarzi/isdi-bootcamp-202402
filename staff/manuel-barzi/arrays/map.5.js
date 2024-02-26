@@ -1,6 +1,6 @@
 delete Array.prototype.map
 
-var assert = require('./assert')
+var testingTools = require('./testing-tools')
 
 function map(array, callback) {
     var newArray = []
@@ -22,8 +22,8 @@ var nums = [1, 4, 9, 16]
 
 var numsX2 = map(nums, function (x) { return x * 2 })
 
-assert.hasValues(numsX2, 2, 8, 18, 32)
-assert.hasValues(nums, 1, 4, 9, 16)
+testingTools.assertHasValues(numsX2, 2, 8, 18, 32)
+testingTools.assertHasValues(nums, 1, 4, 9, 16)
 
 console.log('CASE 2: nums values x 100')
 
@@ -33,8 +33,8 @@ var numsX100 = map(nums, function (num) {
     return num * 100
 })
 
-assert.hasValues(numsX100, 1000, 2000, 3000, 4000, 5000)
-assert.hasValues(nums, 10, 20, 30, 40, 50)
+testingTools.assertHasValues(numsX100, 1000, 2000, 3000, 4000, 5000)
+testingTools.assertHasValues(nums, 10, 20, 30, 40, 50)
 
 
 console.log('CASE 3: chars values to uppercase')
@@ -45,8 +45,8 @@ var charsInUpper = map(chars, function (char) {
     return char.toUpperCase()
 })
 
-assert.hasValues(charsInUpper, 'A', 'B', 'C')
-assert.hasValues(chars, 'a', 'b', 'c')
+testingTools.assertHasValues(charsInUpper, 'A', 'B', 'C')
+testingTools.assertHasValues(chars, 'a', 'b', 'c')
 
 
 console.log('CASE 4: map nums to string with element, index, array')
@@ -57,8 +57,8 @@ var result = map(nums, function (element, index, array) {
     return element + ', ' + index + ', [' + array + ']'
 })
 
-assert.hasValues(result, '10, 0, [10,20,30]', '20, 1, [10,20,30]', '30, 2, [10,20,30]')
-assert.hasValues(nums, 10, 20, 30)
+testingTools.assertHasValues(result, '10, 0, [10,20,30]', '20, 1, [10,20,30]', '30, 2, [10,20,30]')
+testingTools.assertHasValues(nums, 10, 20, 30)
 
 
 console.log('CASE 5: extract cake pieces from data')
@@ -97,7 +97,7 @@ var cake = map(data, calculateCake)
 ]
 */
 
-assert.valuesPropertiesMatch(cake, [{ name: 'Peter', piece: 28.48 }, { name: 'Wendy', piece: 30.38 }, { name: 'Pepito', piece: 18.99 }, { name: 'Campa', piece: 22.15 }], function (current, target) {
+testingTools.assertValuesPropertiesMatch(cake, [{ name: 'Peter', piece: 28.48 }, { name: 'Wendy', piece: 30.38 }, { name: 'Pepito', piece: 18.99 }, { name: 'Campa', piece: 22.15 }], function (current, target) {
     return current.name === target.name && current.piece === target.piece
 })
 
