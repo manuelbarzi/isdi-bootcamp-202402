@@ -20,9 +20,6 @@ assert.equalsValue(person.birthdate.getMinutes(), 45)
 assert.equalsValue(person.country, 'GB')
 assert.equalsValue(person.height, 140)
 assert.equalsValue(person.weight, 50)
-assert.equalsValue(person.sleeping, false)
-assert.equalsValue(person.eating, '')
-assert.equalsValue(person.legsSpeed, Person.NOT_WALK)
 
 console.log('CASE sleep')
 
@@ -30,31 +27,33 @@ var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140,
 
 person.sleep()
 
-assert.equalsValue(person.sleeping, true)
+assert.equalsValue(person.status, 'sleeping')
 
 console.log('CASE awake')
 
 var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
 
-person.sleeping = true
+person.status = 'sleeping'
 
 person.awake()
 
-assert.equalsValue(person.sleeping, false)
+assert.equalsValue(person.status, 'awake')
 
 console.log('CASE eat')
 
 var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
 
+person.status = 'awake'
+
 person.eat('🍌')
 
-assert.equalsValue(person.eating, '🍌')
+assert.equalsValue(person.status, 'awake-eating')
 
 console.log('CASE eat on sleeping (unhappy)')
 
 var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
 
-person.sleeping = true
+person.status = 'sleeping'
 
 var errorThrown
 
@@ -71,56 +70,74 @@ console.log('CASE walk')
 
 var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
 
-person.moveLegs()
+person.status = 'awake'
 
-assert.equalsValue(person.legsSpeed, Person.WALK_NORMAL)
+person.walk()
 
-console.log('CASE walk fast')
+assert.equalsValue(person.status, 'awake-walking')
 
-var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
-
-person.moveLegs(Person.WALK_FAST)
-
-assert.equalsValue(person.legsSpeed, Person.WALK_FAST)
-
-console.log('CASE walk slow')
+console.log('CASE walk at speed 5')
 
 var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
 
-person.moveLegs(Person.WALK_SLOW)
+person.status = 'awake'
 
-assert.equalsValue(person.legsSpeed, Person.WALK_SLOW)
+person.walk(5)
 
-console.log('CASE walk normal')
+assert.equalsValue(person.status, 'awake-walking-fastly')
+assert.equalsValue(person.speed, 5)
 
-var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
-
-person.moveLegs(Person.WALK_NORMAL)
-
-assert.equalsValue(person.legsSpeed, Person.WALK_NORMAL)
-
-console.log('CASE walk very slow')
+console.log('CASE walk at speed 2')
 
 var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
 
-person.moveLegs(Person.WALK_VERY_SLOW)
+person.status = 'awake'
 
-assert.equalsValue(person.legsSpeed, Person.WALK_VERY_SLOW)
+person.walk(2)
+
+assert.equalsValue(person.status, 'awake-walking-slowly')
+assert.equalsValue(person.speed, 2)
+
+console.log('CASE walk at speed 4')
+
+var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
+
+person.status = 'awake'
+
+person.walk(4)
+
+assert.equalsValue(person.status, 'awake-walking')
+assert.equalsValue(person.speed, 4)
+
+console.log('CASE walk at speed 1')
+
+var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
+
+person.status = 'awake'
+
+person.walk(1)
+
+assert.equalsValue(person.status, 'awake-walking-very-slowly')
+assert.equalsValue(person.speed, 1)
+
 
 console.log('CASE talk')
 
 var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
 
+person.status = 'awake'
+
 person.talk()
 
-assert.equalsValue(person.talking, true)
+assert.equalsValue(person.status, 'awake-talking')
 
 console.log('CASE walk & talk')
 
 var person = new Person('Peter', 'Pan', new Date(2000, 0, 1, 16, 45), 'GB', 140, 50)
 
-person.moveLegs()
+person.status = 'awake'
+
+person.walk()
 person.talk()
 
-assert.equalsValue(person.talking, true)
-assert.equalsValue(person.legsSpeed, Person.WALK_NORMAL)
+assert.equalsValue(person.status, 'awake-walking-talking')
