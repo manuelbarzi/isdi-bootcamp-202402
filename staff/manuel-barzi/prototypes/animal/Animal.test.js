@@ -6,57 +6,59 @@ console.log('TEST Animal')
 
 console.log('CASE constructor')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 31, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 31, 16, 45), 'GB', 50)
 
-assert.equalsValue(animal.name, 'Sultan')
-assert.instanceOf(animal.birthdate, Date)
-assert.equalsValue(animal.birthdate.getFullYear(), 2000)
-assert.equalsValue(animal.birthdate.getMonth(), 0)
-assert.equalsValue(animal.birthdate.getDate(), 31)
-assert.equalsValue(animal.birthdate.getHours(), 16)
-assert.equalsValue(animal.birthdate.getMinutes(), 45)
-assert.equalsValue(animal.country, 'GB')
-assert.equalsValue(animal.weight, 50)
-assert.equalsValue(animal.sleeping, false)
-assert.equalsValue(animal.eating, '')
-assert.equalsValue(animal.legsSpeed, 0)
+assert.instanceOf(sultan, Animal)
+assert.equalsValue(sultan.constructor, Animal)
+assert.equalsValue(sultan.name, 'Sultan')
+assert.instanceOf(sultan.birthdate, Date)
+assert.equalsValue(sultan.birthdate.getFullYear(), 2000)
+assert.equalsValue(sultan.birthdate.getMonth(), 0)
+assert.equalsValue(sultan.birthdate.getDate(), 31)
+assert.equalsValue(sultan.birthdate.getHours(), 16)
+assert.equalsValue(sultan.birthdate.getMinutes(), 45)
+assert.equalsValue(sultan.country, 'GB')
+assert.equalsValue(sultan.weight, 50)
+assert.equalsValue(sultan.sleeping, false)
+assert.equalsValue(sultan.eating, '')
+assert.equalsValue(sultan.legsSpeed, 0)
 
 console.log('CASE sleep')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.sleep()
+sultan.sleep()
 
-assert.equalsValue(animal.sleeping, true)
+assert.equalsValue(sultan.sleeping, true)
 
 console.log('CASE awake')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.sleeping = true
+sultan.sleeping = true
 
-animal.awake()
+sultan.awake()
 
-assert.equalsValue(animal.sleeping, false)
+assert.equalsValue(sultan.sleeping, false)
 
 console.log('CASE eat')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.eat('🍌')
+sultan.eat('🍌')
 
-assert.equalsValue(animal.eating, '🍌')
+assert.equalsValue(sultan.eating, '🍌')
 
 console.log('CASE eat on sleeping (unhappy)')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.sleeping = true
+sultan.sleeping = true
 
 var errorThrown
 
 try {
-    animal.eat('🍌')
+    sultan.eat('🍌')
 } catch (error) {
     errorThrown = error
 }
@@ -66,65 +68,65 @@ assert.error(errorThrown, 'Error', 'try to eat on sleeping')
 
 console.log('CASE not walk')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.moveLegs(Animal.NOT_WALK)
+sultan.moveLegs(Animal.NOT_WALK)
 
-assert.equalsValue(animal.legsSpeed, Animal.NOT_WALK)
+assert.equalsValue(sultan.legsSpeed, Animal.NOT_WALK)
 
 console.log('CASE walk')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.moveLegs()
+sultan.moveLegs()
 
-assert.equalsValue(animal.legsSpeed, Animal.WALK_NORMAL)
+assert.equalsValue(sultan.legsSpeed, Animal.WALK_NORMAL)
 
 console.log('CASE walk fast')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.moveLegs(Animal.WALK_FAST)
+sultan.moveLegs(Animal.WALK_FAST)
 
-assert.equalsValue(animal.legsSpeed, Animal.WALK_FAST)
+assert.equalsValue(sultan.legsSpeed, Animal.WALK_FAST)
 
 console.log('CASE walk slow')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.moveLegs(Animal.WALK_SLOW)
+sultan.moveLegs(Animal.WALK_SLOW)
 
-assert.equalsValue(animal.legsSpeed, Animal.WALK_SLOW)
+assert.equalsValue(sultan.legsSpeed, Animal.WALK_SLOW)
 
 console.log('CASE walk normal')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.moveLegs(Animal.WALK_NORMAL)
+sultan.moveLegs(Animal.WALK_NORMAL)
 
-assert.equalsValue(animal.legsSpeed, Animal.WALK_NORMAL)
+assert.equalsValue(sultan.legsSpeed, Animal.WALK_NORMAL)
 
 console.log('CASE walk very slow')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.moveLegs(Animal.WALK_VERY_SLOW)
+sultan.moveLegs(Animal.WALK_VERY_SLOW)
 
-assert.equalsValue(animal.legsSpeed, Animal.WALK_VERY_SLOW)
+assert.equalsValue(sultan.legsSpeed, Animal.WALK_VERY_SLOW)
 
 console.log('CASE run')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-animal.moveLegs(Animal.RUN)
+sultan.moveLegs(Animal.RUN)
 
-assert.equalsValue(animal.legsSpeed, Animal.RUN)
+assert.equalsValue(sultan.legsSpeed, Animal.RUN)
 
 console.log('CASE toString')
 
-var animal = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
+var sultan = new Animal('Sultan', new Date(2000, 0, 1, 16, 45), 'GB', 50)
 
-assert.equalsValue(animal.toString(), 'Animal (Sultan)')
+assert.equalsValue(sultan.toString(), 'Animal (Sultan)')
 
 console.log('CASE constructor fails on non-string name')
 

@@ -1,24 +1,16 @@
 var Animal = require('./Animal')
+var Person = require('./Person')
 
 function Pet(owner, name, birthdate, country, weight) {
     if (!(owner instanceof Person)) throw new TypeError('owner is not a Person')
-    if (typeof name !== 'string') throw new TypeError('name is not a String')
-    if (!(birthdate instanceof Date)) throw new TypeError('birthdate is not a Date')
-    if (typeof country !== 'string') throw new TypeError('country is not a String')
-    if (typeof weight !== 'number') throw new TypeError('weight is not a number')
-
     this.owner = owner
-    this.name = name
-    this.birthdate = birthdate
-    this.country = country
-    this.weight = weight
-    this.sleeping = false
-    this.eating = ''
-    this.legsSpeed = Pet.NOT_WALK
+
+    Animal.call(this, name, birthdate, country, weight)
 }
 
 //Pet.prototype = new Animal
 Pet.prototype = Object.create(Animal.prototype)
+Pet.prototype.constructor = Pet
 
 Pet.prototype.toString = function () {
     return Pet.name + ' (' + this.name + ', ' + this.birthdate.toLocaleDateString('en-CA') + ', ' + this.country + ')'
