@@ -21,27 +21,9 @@ function Arroz() {
     }
 }
 
-Arroz.prototype.push = function () {
-    for (var i = 0; i < arguments.length; i++) {
-        var argument = arguments[i]
-
-        this[this.length] = argument
-        this.length++
-    }
-
-    return this.length
-}
-
-Arroz.prototype.pop = function () {
-    var lastIndex = this.length - 1
-
-    var last = this[lastIndex]
-
-    delete this[lastIndex]
-
-    this.length--
-
-    return last
+Arroz.prototype.push = function (value) {
+    this[this.length] = value
+    this.length++
 }
 
 module.exports = Arroz
