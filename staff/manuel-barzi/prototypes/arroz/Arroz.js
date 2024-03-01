@@ -44,4 +44,21 @@ Arroz.prototype.pop = function () {
     return last
 }
 
+Arroz.prototype.toString = function () {
+    var string = 'Arroz ['
+
+    for (var i = 0; i < this.length; i++) {
+        var element = this[i]
+
+        string += element
+
+        if (i < this.length - 1)
+            string += ', '
+    }
+
+    string += ']'
+
+    return string
+}
+
 module.exports = Arroz

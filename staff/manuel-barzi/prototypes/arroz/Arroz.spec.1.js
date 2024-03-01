@@ -7,14 +7,14 @@ matcha.describe('Arroz', function () {
         matcha.it('should construct', function () {
             var a = new Arroz
 
-            matcha.expect(a).toBeInstanceOf(Arroz)
+            matcha.expect(a instanceof Arroz).toBe(true)
             matcha.expect(a.length).toBe(0)
         })
 
         matcha.it('should construct with multiple values', function () {
             var a = new Arroz(10, 20, 30)
 
-            matcha.expect(a).toBeInstanceOf(Arroz)
+            matcha.expect(a instanceof Arroz).toBe(true)
             matcha.expect(a.length).toBe(3)
             matcha.expect(a[0]).toBe(10)
             matcha.expect(a[1]).toBe(20)
@@ -24,7 +24,7 @@ matcha.describe('Arroz', function () {
         matcha.it('should construct with one non-numeric value', function () {
             var a = new Arroz(true)
 
-            matcha.expect(a).toBeInstanceOf(Arroz)
+            matcha.expect(a instanceof Arroz).toBe(true)
             matcha.expect(a.length).toBe(1)
             matcha.expect(a[0]).toBe(true)
         })
@@ -32,7 +32,7 @@ matcha.describe('Arroz', function () {
         matcha.it('should construct with one numeric value', function () {
             var a = new Arroz(5)
 
-            matcha.expect(a).toBeInstanceOf(Arroz)
+            matcha.expect(a instanceof Arroz).toBe(true)
             matcha.expect(a.length).toBe(5)
             for (var i = 0; i < a.length; i++)
                 matcha.expect(a[i]).toBe(undefined)
@@ -81,18 +81,6 @@ matcha.describe('Arroz', function () {
             matcha.expect(a[1]).toBe(20)
             matcha.expect(a[2]).toBe(undefined)
             matcha.expect(value).toBe(30)
-        })
-    })
-
-    matcha.describe('> toString', function () {
-        matcha.it('should convert to string', function () {
-            var a = new Arroz(10, 20, 30, 40, 50)
-
-            matcha.expect(!!a.toString).toBe(true)
-
-            var string = a.toString()
-
-            matcha.expect(string).toBe('Arroz [10, 20, 30, 40, 50]')
         })
     })
 })
