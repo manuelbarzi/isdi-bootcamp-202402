@@ -1,25 +1,24 @@
 var Animal = require('./Animal')
 
-function Person(name, surname, birthdate, country, height, weight) {
-    Animal.call(this, name, birthdate, country, weight)
+class Person extends Animal {
+    constructor(name, surname, birthdate, country, height, weight) {
+        super(name, birthdate, country, weight)
 
-    this.surname = surname
-    this.height = height
-    this.talking = false
-}
+        this.surname = surname
+        this.height = height
+        this.talking = false
+    }
 
-Person.prototype = Object.create(Animal.prototype)
-Person.prototype.constructor = Person
+    static NOT_WALK = 0
+    static WALK_VERY_SLOW = 1
+    static WALK_SLOW = 2
+    static WALK_NORMAL = 4
+    static WALK_FAST = 5
+    static RUN = 6
 
-Person.NOT_WALK = 0
-Person.WALK_VERY_SLOW = 1
-Person.WALK_SLOW = 2
-Person.WALK_NORMAL = 4
-Person.WALK_FAST = 5
-Person.RUN = 6
-
-Person.prototype.talk = function () {
-    this.talking = true
+    talk() {
+        this.talking = true
+    }
 }
 
 module.exports = Person

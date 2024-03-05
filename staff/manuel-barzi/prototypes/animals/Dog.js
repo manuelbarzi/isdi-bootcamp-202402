@@ -1,20 +1,19 @@
-var Pet = require('./Pet')
+const Pet = require('./Pet')
 
-function Dog(owner, name, birthdate, country, weight) {
-    Pet.call(this, owner, name, birthdate, country, weight)
+class Dog extends Pet {
+    constructor(owner, name, birthdate, country, weight) {
+        super(owner, name, birthdate, country, weight)
 
-    this.barking = false
-}
+        this.barking = false
+    }
 
-Dog.prototype = Object.create(Pet.prototype)
-Dog.prototype.constructor = Dog
+    bark() {
+        this.barking = true
+    }
 
-Dog.prototype.bark = function () {
-    this.barking = true
-}
-
-Dog.prototype.tsssh = function () {
-    this.barking = false
+    tsssh() {
+        this.barking = false
+    }
 }
 
 module.exports = Dog

@@ -1,18 +1,18 @@
-const matcha = require('./matcha')
+var matcha = require('./matcha')
 
-const Arroz = require('./Arroz')
+var Arroz = require('./Arroz')
 
-matcha.describe('Arroz', () => {
-    matcha.describe('> constructor', () => {
-        matcha.it('should construct', () => {
-            const a = new Arroz
+matcha.describe('Arroz', function () {
+    matcha.describe('> constructor', function () {
+        matcha.it('should construct', function () {
+            var a = new Arroz
 
             matcha.expect(a).toBeInstanceOf(Arroz)
             matcha.expect(a.length).toBe(0)
         })
 
-        matcha.it('should construct with multiple values', () => {
-            const a = new Arroz(10, 20, 30)
+        matcha.it('should construct with multiple values', function () {
+            var a = new Arroz(10, 20, 30)
 
             matcha.expect(a).toBeInstanceOf(Arroz)
             matcha.expect(a.length).toBe(3)
@@ -21,43 +21,43 @@ matcha.describe('Arroz', () => {
             matcha.expect(a[2]).toBe(30)
         })
 
-        matcha.it('should construct with one non-numeric value', () => {
-            const a = new Arroz(true)
+        matcha.it('should construct with one non-numeric value', function () {
+            var a = new Arroz(true)
 
             matcha.expect(a).toBeInstanceOf(Arroz)
             matcha.expect(a.length).toBe(1)
             matcha.expect(a[0]).toBe(true)
         })
 
-        matcha.it('should construct with one numeric value', () => {
-            const a = new Arroz(5)
+        matcha.it('should construct with one numeric value', function () {
+            var a = new Arroz(5)
 
             matcha.expect(a).toBeInstanceOf(Arroz)
             matcha.expect(a.length).toBe(5)
-            for (let i = 0; i < a.length; i++)
+            for (var i = 0; i < a.length; i++)
                 matcha.expect(a[i]).toBe(undefined)
         })
     })
 
-    matcha.describe('> push', () => {
-        matcha.it('should push a value', () => {
-            const a = new Arroz(10, 20, 30)
+    matcha.describe('> push', function () {
+        matcha.it('should push a value', function () {
+            var a = new Arroz(10, 20, 30)
 
             matcha.expect(!!a.push).toBe(true)
 
-            const length = a.push(40)
+            var length = a.push(40)
 
             matcha.expect(a.length).toBe(4)
             matcha.expect(a[a.length - 1]).toBe(40)
             matcha.expect(length).toBe(4)
         })
 
-        matcha.it('should push many values', () => {
-            const a = new Arroz(10, 20, 30)
+        matcha.it('should push many values', function () {
+            var a = new Arroz(10, 20, 30)
 
             matcha.expect(!!a.push).toBe(true)
 
-            const length = a.push(40, 50, 60, 70)
+            var length = a.push(40, 50, 60, 70)
 
             matcha.expect(a.length).toBe(7)
             matcha.expect(a[3]).toBe(40)
@@ -68,13 +68,13 @@ matcha.describe('Arroz', () => {
         })
     })
 
-    matcha.describe('> pop', () => {
-        matcha.it('should extract last value', () => {
-            const a = new Arroz(10, 20, 30)
+    matcha.describe('> pop', function () {
+        matcha.it('should extract last value', function () {
+            var a = new Arroz(10, 20, 30)
 
             matcha.expect(!!a.pop).toBe(true)
 
-            const value = a.pop()
+            var value = a.pop()
 
             matcha.expect(a.length).toBe(2)
             matcha.expect(a[0]).toBe(10)
@@ -84,22 +84,22 @@ matcha.describe('Arroz', () => {
         })
     })
 
-    matcha.describe('> toString', () => {
-        matcha.it('should convert to string', () => {
-            const a = new Arroz(10, 20, 30, 40, 50)
+    matcha.describe('> toString', function () {
+        matcha.it('should convert to string', function () {
+            var a = new Arroz(10, 20, 30, 40, 50)
 
             matcha.expect(!!a.toString).toBe(true)
 
-            const string = a.toString()
+            var string = a.toString()
 
             matcha.expect(string).toBe('Arroz [10, 20, 30, 40, 50]')
         })
     })
 
-    matcha.describe('> forEach', () => {
-        matcha.it('should iterate on each element', () => {
-            const a = new Arroz(10, 20, 30, 40, 50, 60)
-            const b = new Arroz
+    matcha.describe('> forEach', function () {
+        matcha.it('should iterate on each element', function () {
+            var a = new Arroz(10, 20, 30, 40, 50, 60)
+            var b = new Arroz
 
             a.forEach(function (element, index, arroz) {
                 b[index] = { item: element, iterable: arroz }
@@ -108,13 +108,13 @@ matcha.describe('Arroz', () => {
 
             matcha.expect(a.length).toBe(6)
 
-            for (let i = 0; i < a.length; i++)
+            for (var i = 0; i < a.length; i++)
                 matcha.expect(a[i]).toBe(10 * (i + 1))
 
             matcha.expect(b.length).toBe(a.length)
 
-            for (let i = 0; i < b.length; i++) {
-                const element = b[i]
+            for (var i = 0; i < b.length; i++) {
+                var element = b[i]
 
                 matcha.expect(element.item).toBe((10 * (i + 1)))
                 matcha.expect(element.iterable).toBe(a)
@@ -122,13 +122,13 @@ matcha.describe('Arroz', () => {
         })
     })
 
-    matcha.describe('> find', () => {
-        matcha.it('should find a product in cart', () => {
-            const cart = new Arroz({ brand: 'adidas', model: 'cool socks', price: 16 }, { brand: 'nike', model: 'air max', price: 120 }, { brand: 'puma', model: 'dangerous glasses', price: 30 })
+    matcha.describe('> find', function () {
+        matcha.it('should find a product in cart', function () {
+            var cart = new Arroz({ brand: 'adidas', model: 'cool socks', price: 16 }, { brand: 'nike', model: 'air max', price: 120 }, { brand: 'puma', model: 'dangerous glasses', price: 30 })
 
-            let i = 0
+            var i = 0
 
-            let item = cart.find(function (element, index, arroz) {
+            var item = cart.find(function (element, index, arroz) {
                 matcha.expect(index).toBe(i++)
                 matcha.expect(arroz).toBe(cart)
 
@@ -140,12 +140,12 @@ matcha.describe('Arroz', () => {
             matcha.expect(item.price).toBe(120)
         })
 
-        matcha.it('should not find a product that is not in cart', () => {
-            const cart = new Arroz({ brand: 'adidas', model: 'cool socks', price: 16 }, { brand: 'nike', model: 'air max', price: 120 }, { brand: 'puma', model: 'dangerous glasses', price: 30 })
+        matcha.it('should not find a product that is not in cart', function () {
+            var cart = new Arroz({ brand: 'adidas', model: 'cool socks', price: 16 }, { brand: 'nike', model: 'air max', price: 120 }, { brand: 'puma', model: 'dangerous glasses', price: 30 })
 
-            let i = 0
+            var i = 0
 
-            let item = cart.find(function (element, index, arroz) {
+            var item = cart.find(function (element, index, arroz) {
                 matcha.expect(index).toBe(i++)
                 matcha.expect(arroz).toBe(cart)
 
@@ -156,13 +156,13 @@ matcha.describe('Arroz', () => {
         })
     })
 
-    matcha.describe('> map', () => {
-        matcha.it('should map numbers to power of 2', () => {
-            const nums = new Arroz(10, 20, 30)
+    matcha.describe('> map', function () {
+        matcha.it('should map numbers to power of 2', function () {
+            var nums = new Arroz(10, 20, 30)
 
-            let i = 0
+            var i = 0
 
-            const numsPow2 = nums.map(function (element, index, arroz) {
+            var numsPow2 = nums.map(function (element, index, arroz) {
                 matcha.expect(index).toBe(i++)
                 matcha.expect(arroz).toBe(nums)
                 matcha.expect(element).toBe(10 * (index + 1))
@@ -172,26 +172,26 @@ matcha.describe('Arroz', () => {
 
             matcha.expect(nums.length).toBe(3)
 
-            for (let i = 0; i < nums.length; i++) {
+            for (var i = 0; i < nums.length; i++) {
                 matcha.expect(nums[i]).toBe(10 * (i + 1))
             }
 
             matcha.expect(numsPow2.length).toBe(nums.length)
 
-            for (let i = 0; i < numsPow2.length; i++) {
+            for (var i = 0; i < numsPow2.length; i++) {
                 matcha.expect(numsPow2[i]).toBe((10 * (i + 1)) ** 2)
             }
         })
     })
 
-    matcha.describe('> from', () => {
-        matcha.it('should create an instance of Arroz from numbers', () => {
-            const nums = new Arroz(10, 20, 30)
-            const nums2 = Arroz.from(nums)
+    matcha.describe('> from', function () {
+        matcha.it('should create an instance of Arroz from numbers', function () {
+            var nums = new Arroz(10, 20, 30)
+            var nums2 = Arroz.from(nums)
 
             matcha.expect(nums.length).toBe(3)
 
-            for (let i = 0; i < nums.length; i++) {
+            for (var i = 0; i < nums.length; i++) {
                 matcha.expect(nums[i]).toBe(10 * (i + 1))
             }
 
@@ -201,7 +201,7 @@ matcha.describe('Arroz', () => {
 
             matcha.expect(nums2.length).toBe(nums.length)
 
-            for (let i = 0; i < nums2.length; i++) {
+            for (var i = 0; i < nums2.length; i++) {
                 matcha.expect(nums2[i]).toBe(10 * (i + 1))
             }
         })
