@@ -1,6 +1,6 @@
 // business (logic)
 
-var logic = (function () {
+function init() {
     function registerUser(name, birthdate, email, username, password) {
         var user = data.findUser(function (user) {
             return user.email === email || user.username === username
@@ -43,22 +43,12 @@ var logic = (function () {
         sessionStorage.clear()
     }
 
-    function createPost(image, text) {
-        var post = {
-            username: sessionStorage.username,
-            image: image,
-            text: text,
-            date: new Date().toLocaleDateString('en-CA')
-        }
-
-        data.insertPost(post)
-    }
-
     return {
         registerUser: registerUser,
         loginUser: loginUser,
         retrieveUser: retrieveUser,
-        logoutUser: logoutUser,
-        createPost: createPost
+        logoutUser: logoutUser
     }
-})()
+}
+
+var logic = init()

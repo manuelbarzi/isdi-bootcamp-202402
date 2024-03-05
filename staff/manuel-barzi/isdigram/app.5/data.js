@@ -17,17 +17,8 @@ var data = (function () {
         localStorage.users = JSON.stringify(users)
     }
 
-    function insertPost(post) {
-        var posts = JSON.parse(localStorage.posts || '[]')
-
-        posts.push(post)
-
-        localStorage.posts = JSON.stringify(posts)
-    }
-
     return {
         findUser: findUser,
-        insertUser: insertUser,
-        insertPost: insertPost
+        insertUser: insertUser
     }
 })()

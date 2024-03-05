@@ -43,22 +43,10 @@ var logic = (function () {
         sessionStorage.clear()
     }
 
-    function createPost(image, text) {
-        var post = {
-            username: sessionStorage.username,
-            image: image,
-            text: text,
-            date: new Date().toLocaleDateString('en-CA')
-        }
-
-        data.insertPost(post)
-    }
-
     return {
         registerUser: registerUser,
         loginUser: loginUser,
         retrieveUser: retrieveUser,
-        logoutUser: logoutUser,
-        createPost: createPost
+        logoutUser: logoutUser
     }
 })()

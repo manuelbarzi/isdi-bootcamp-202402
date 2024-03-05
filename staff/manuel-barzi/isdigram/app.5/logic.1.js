@@ -1,7 +1,7 @@
 // business (logic)
 
-var logic = (function () {
-    function registerUser(name, birthdate, email, username, password) {
+var logic = {
+    registerUser: function (name, birthdate, email, username, password) {
         var user = data.findUser(function (user) {
             return user.email === email || user.username === username
         })
@@ -17,9 +17,9 @@ var logic = (function () {
         }
 
         data.insertUser(user)
-    }
+    },
 
-    function loginUser(username, password) {
+    loginUser: function (username, password) {
         var user = data.findUser(function (user) {
             return user.username === username && user.password === password
         })
@@ -27,9 +27,9 @@ var logic = (function () {
         if (!user) throw new Error('wrong credentials')
 
         sessionStorage.username = username
-    }
+    },
 
-    function retrieveUser() {
+    retrieveUser: function () {
         var user = data.findUser(function (user) {
             return user.username === sessionStorage.username
         })
@@ -37,28 +37,9 @@ var logic = (function () {
         if (!user) throw new Error('user not found')
 
         return user
-    }
+    },
 
-    function logoutUser() {
+    logoutUser: function () {
         sessionStorage.clear()
     }
-
-    function createPost(image, text) {
-        var post = {
-            username: sessionStorage.username,
-            image: image,
-            text: text,
-            date: new Date().toLocaleDateString('en-CA')
-        }
-
-        data.insertPost(post)
-    }
-
-    return {
-        registerUser: registerUser,
-        loginUser: loginUser,
-        retrieveUser: retrieveUser,
-        logoutUser: logoutUser,
-        createPost: createPost
-    }
-})()
+}
