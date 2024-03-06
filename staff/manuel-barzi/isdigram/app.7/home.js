@@ -7,7 +7,6 @@
     var createPostForm = createPostSection.querySelector('form')
     var createPostCancelButton = createPostSection.querySelector('#create-post-cancel-button')
     var createPostButton = document.querySelector('#create-post-button')
-    var postListSection = document.querySelector('#post-list-section')
 
     try {
         var user = logic.retrieveUser()
@@ -40,8 +39,6 @@
             createPostForm.reset()
 
             createPostSection.style.display = 'none'
-
-            renderPosts()
         } catch (error) {
             console.error(error)
 
@@ -56,36 +53,4 @@
     createPostCancelButton.onclick = function () {
         createPostSection.style.display = 'none'
     }
-
-    function renderPosts() {
-        try {
-            var posts = logic.retrievePosts()
-
-            postListSection.innerHTML = ''
-
-            posts.forEach(function (post) {
-                var article = document.createElement('article')
-
-                var authorHeading = document.createElement('h3')
-                authorHeading.innerText = post.author
-
-                var image = document.createElement('img')
-                image.src = post.image
-
-                var paragraph = document.createElement('p')
-                paragraph.innerText = post.text
-
-                var dateTime = document.createElement('time')
-                dateTime.innerText = post.date
-
-                article.append(authorHeading, image, paragraph, dateTime)
-
-                postListSection.appendChild(article)
-            })
-        } catch (error) {
-            alert(error.message)
-        }
-    }
-
-    renderPosts()
 })()

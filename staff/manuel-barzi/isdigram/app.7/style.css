@@ -3,7 +3,7 @@ body {
 }
 
 main {
-  margin: 0 5vw;
+  margin: 0 20vw;
 }
 
 form {
@@ -21,17 +21,8 @@ footer {
   box-sizing: border-box;
 }
 
-img {
-  max-width: 100%;
-}
-
-#create-post-section {
+section {
   display: none;
-  margin-bottom: 50px;
-}
-
-#post-list-section {
-  margin-bottom: 50px;
 }
 
 /*# sourceMappingURL=style.css.map */

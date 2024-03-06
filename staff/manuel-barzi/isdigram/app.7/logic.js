@@ -45,7 +45,7 @@ var logic = (function () {
 
     function createPost(image, text) {
         var post = {
-            author: sessionStorage.username,
+            username: sessionStorage.username,
             image: image,
             text: text,
             date: new Date().toLocaleDateString('en-CA')
@@ -54,18 +54,11 @@ var logic = (function () {
         data.insertPost(post)
     }
 
-    function retrievePosts() {
-        var posts = data.getAllPosts()
-
-        return posts
-    }
-
     return {
         registerUser: registerUser,
         loginUser: loginUser,
         retrieveUser: retrieveUser,
         logoutUser: logoutUser,
-        createPost: createPost,
-        retrievePosts: retrievePosts
+        createPost: createPost
     }
 })()
