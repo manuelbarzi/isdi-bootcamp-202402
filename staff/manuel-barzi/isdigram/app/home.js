@@ -1,6 +1,12 @@
 // presentation
 
 (function () {
+    if (!logic.isUserLoggedIn()) {
+        location.href = 'login.html'
+
+        return
+    }
+
     var title = document.querySelector('h1')
     var logoutButton = document.querySelector('#logout-button')
     var createPostSection = document.querySelector('#create-post-section')
@@ -22,9 +28,7 @@
     logoutButton.onclick = function () {
         logic.logoutUser()
 
-        var loginAddress = location.href.replace('home', 'login')
-
-        location.href = loginAddress
+        location.href = 'login.html'
     }
 
     createPostForm.onsubmit = function (event) {
@@ -88,15 +92,16 @@
                     deleteButton.innerText = '🗑️'
 
                     deleteButton.onclick = function () {
-                        try {
-                            logic.removePost(post.id)
+                        if (confirm('delete post?'))
+                            try {
+                                logic.removePost(post.id)
 
-                            renderPosts()
-                        } catch (error) {
-                            console.error(error)
+                                renderPosts()
+                            } catch (error) {
+                                console.error(error)
 
-                            alert(error.message)
-                        }
+                                alert(error.message)
+                            }
                     }
 
                     article.appendChild(deleteButton)

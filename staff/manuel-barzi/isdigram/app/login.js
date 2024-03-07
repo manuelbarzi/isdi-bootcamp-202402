@@ -19,8 +19,7 @@
 
             form.reset()
 
-            var homeAddress = location.href.replace('login', 'home')
-            location.href = homeAddress
+            location.href = 'home.html'
         } catch (error) {
             alert(error.message)
         }

@@ -43,6 +43,14 @@ var logic = (function () {
         sessionStorage.clear()
     }
 
+    function getLoggedInUserId() {
+        return sessionStorage.userId
+    }
+
+    function isUserLoggedIn() {
+        return !!sessionStorage.userId
+    }
+
     function createPost(image, text) {
         var post = {
             author: sessionStorage.userId,
@@ -68,10 +76,6 @@ var logic = (function () {
         return posts
     }
 
-    function getLoggedInUserId() {
-        return sessionStorage.userId
-    }
-
     function removePost(postId) {
         var post = data.findPost(function (post) {
             return post.id === postId
@@ -91,9 +95,10 @@ var logic = (function () {
         loginUser: loginUser,
         retrieveUser: retrieveUser,
         logoutUser: logoutUser,
+        getLoggedInUserId: getLoggedInUserId,
+        isUserLoggedIn: isUserLoggedIn,
         createPost: createPost,
         retrievePosts: retrievePosts,
-        getLoggedInUserId: getLoggedInUserId,
         removePost: removePost
     }
 })()
