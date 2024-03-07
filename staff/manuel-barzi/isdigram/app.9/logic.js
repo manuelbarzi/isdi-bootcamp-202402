@@ -2,11 +2,6 @@
 
 var logic = (function () {
     function registerUser(name, birthdate, email, username, password) {
-        if (typeof name !== 'string') throw new Error('name is not a string')
-        if (!name.length) throw new Error('name is empty')
-
-        // TODO input validation
-
         var user = data.findUser(function (user) {
             return user.email === email || user.username === username
         })
@@ -25,8 +20,6 @@ var logic = (function () {
     }
 
     function loginUser(username, password) {
-        // TODO input validation
-
         var user = data.findUser(function (user) {
             return user.username === username && user.password === password
         })
@@ -59,8 +52,6 @@ var logic = (function () {
     }
 
     function createPost(image, text) {
-        // TODO input validation
-
         var post = {
             author: sessionStorage.userId,
             image: image,
@@ -86,8 +77,6 @@ var logic = (function () {
     }
 
     function removePost(postId) {
-        // TODO input validation
-
         var post = data.findPost(function (post) {
             return post.id === postId
         })
