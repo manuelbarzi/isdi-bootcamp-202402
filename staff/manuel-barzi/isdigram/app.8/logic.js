@@ -26,12 +26,12 @@ var logic = (function () {
 
         if (!user) throw new Error('wrong credentials')
 
-        sessionStorage.userId = user.id
+        sessionStorage.username = username
     }
 
     function retrieveUser() {
         var user = data.findUser(function (user) {
-            return user.id === sessionStorage.userId
+            return user.username === sessionStorage.username
         })
 
         if (!user) throw new Error('user not found')
@@ -45,7 +45,7 @@ var logic = (function () {
 
     function createPost(image, text) {
         var post = {
-            author: sessionStorage.userId,
+            author: sessionStorage.username,
             image: image,
             text: text,
             date: new Date().toLocaleDateString('en-CA')
@@ -57,33 +57,7 @@ var logic = (function () {
     function retrievePosts() {
         var posts = data.getAllPosts()
 
-        posts.forEach(function (post) {
-            var user = data.findUser(function (user) {
-                return user.id === post.author
-            })
-
-            post.author = { id: user.id, username: user.username }
-        })
-
         return posts
-    }
-
-    function getLoggedInUserId() {
-        return sessionStorage.userId
-    }
-
-    function removePost(postId) {
-        var post = data.findPost(function (post) {
-            return post.id === postId
-        })
-
-        if (!post) throw new Error('post not found')
-
-        if (post.author !== sessionStorage.userId) throw new Error('post does not belong to user')
-
-        data.deletePost(function (post) {
-            return post.id === postId
-        })
     }
 
     return {
@@ -92,8 +66,6 @@ var logic = (function () {
         retrieveUser: retrieveUser,
         logoutUser: logoutUser,
         createPost: createPost,
-        retrievePosts: retrievePosts,
-        getLoggedInUserId: getLoggedInUserId,
-        removePost: removePost
+        retrievePosts: retrievePosts
     }
 })()

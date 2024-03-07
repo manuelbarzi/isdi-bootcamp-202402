@@ -14,8 +14,6 @@
 
         title.innerText = 'Hello, ' + user.name + '!'
     } catch (error) {
-        console.error(error)
-
         alert(error.message)
     }
 
@@ -69,7 +67,7 @@
                 var article = document.createElement('article')
 
                 var authorHeading = document.createElement('h3')
-                authorHeading.innerText = post.author.username
+                authorHeading.innerText = post.author
 
                 var image = document.createElement('img')
                 image.src = post.image
@@ -82,31 +80,9 @@
 
                 article.append(authorHeading, image, paragraph, dateTime)
 
-                if (post.author.id === logic.getLoggedInUserId()) {
-                    var deleteButton = document.createElement('button')
-
-                    deleteButton.innerText = '🗑️'
-
-                    deleteButton.onclick = function () {
-                        try {
-                            logic.removePost(post.id)
-
-                            renderPosts()
-                        } catch (error) {
-                            console.error(error)
-
-                            alert(error.message)
-                        }
-                    }
-
-                    article.appendChild(deleteButton)
-                }
-
                 postListSection.appendChild(article)
             })
         } catch (error) {
-            console.error(error)
-
             alert(error.message)
         }
     }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <h1>Hello, World!</h1>
+        <button id="logout-button">Logout</button>
+
+        <section id="post-list-section"></section>
+
+        <section id="create-post-section">
+            <h2>Create Post</h2>
+
+            <form>
+                <label for="image">Image</label>
+                <input type="text" id="image">
+
+                <label for="text">Text</label>
+                <input type="text" id="text">
+
+                <button type="submit">Create</button>
+            </form>
+
+            <button id="create-post-cancel-button">Cancel</button>
+        </section>
+    </main>
+
+    <footer>
+        <button id="create-post-button">+</button>
+    </footer>
+    <script src="data.js"></script>
+    <script src="logic.js"></script>
+    <script src="home.js"></script>
+</body>
+
+</html>
