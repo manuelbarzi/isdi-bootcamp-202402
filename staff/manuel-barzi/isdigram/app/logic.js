@@ -6,7 +6,7 @@ var logic = (function () {
     var DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/
     var EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     var PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9]+$/
-    var URL_REGEX = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi
+    var URL_REGEX = /^(http|https):\/\//
 
     // helpers
 
@@ -124,7 +124,7 @@ var logic = (function () {
             post.author = { id: user.id, username: user.username }
         })
 
-        return posts
+        return posts.reverse()
     }
 
     function removePost(postId) {
