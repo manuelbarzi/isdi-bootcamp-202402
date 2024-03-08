@@ -77,9 +77,16 @@ var data = (function () {
         savePosts(posts)
     }
 
+    function printUsers() {
+        var users = loadUsers()
+
+        console.table(users)
+    }
+
     return {
         findUser: findUser,
         insertUser: insertUser,
+        printUsers: printUsers,
         insertPost: insertPost,
         getAllPosts: getAllPosts,
         findPost: findPost,
