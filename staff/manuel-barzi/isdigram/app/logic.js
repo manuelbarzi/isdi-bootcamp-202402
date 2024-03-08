@@ -56,7 +56,8 @@ var logic = (function () {
             birthdate: birthdate,
             email: email,
             username: username,
-            password: password
+            password: password,
+            status: 'offline',
         }
 
         data.insertUser(user)
@@ -72,6 +73,10 @@ var logic = (function () {
 
         if (!user) throw new Error('wrong credentials')
 
+        user.status = 'online'
+
+        data.updateUser(user)
+
         sessionStorage.userId = user.id
     }
 
@@ -86,7 +91,17 @@ var logic = (function () {
     }
 
     function logoutUser() {
-        sessionStorage.clear()
+        var user = data.findUser(function (user) {
+            return user.id === sessionStorage.userId
+        })
+
+        if (!user) throw new Error('wrong credentials')
+
+        user.status = 'offline'
+
+        data.updateUser(user)
+
+        delete sessionStorage.userId
     }
 
     function getLoggedInUserId() {
@@ -95,6 +110,32 @@ var logic = (function () {
 
     function isUserLoggedIn() {
         return !!sessionStorage.userId
+    }
+
+    function retrieveUsers() {
+        var users = data.getAllUsers()
+
+        var index = users.findIndex(function (user) {
+            return user.id === sessionStorage.userId
+        })
+
+        users.splice(index, 1)
+
+        users.forEach(function (user) {
+            delete user.name
+            delete user.email
+            delete user.password
+            delete user.birthdate
+        })
+
+        users.sort(function (a, b) {
+            return a.username < b.username ? -1 : 1
+        }).sort(function (a, b) {
+            return a.status > b.status ? -1 : 1
+        })
+
+
+        return users
     }
 
     function createPost(image, text) {
@@ -150,6 +191,7 @@ var logic = (function () {
         logoutUser: logoutUser,
         getLoggedInUserId: getLoggedInUserId,
         isUserLoggedIn: isUserLoggedIn,
+        retrieveUsers: retrieveUsers,
         createPost: createPost,
         retrievePosts: retrievePosts,
         removePost: removePost

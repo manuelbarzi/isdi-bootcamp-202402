@@ -14,6 +14,10 @@
     var createPostCancelButton = createPostSection.querySelector('#create-post-cancel-button')
     var createPostButton = document.querySelector('#create-post-button')
     var postListSection = document.querySelector('#post-list-section')
+    var chatButton = document.querySelector('#chat-button')
+    var chatSection = document.querySelector('#chat-section')
+    var footer = document.querySelector('#footer')
+    var homeButton = document.querySelector('#home-button')
 
     try {
         var user = logic.retrieveUser()
@@ -117,4 +121,47 @@
     }
 
     renderPosts()
+
+    chatButton.onclick = function () {
+        postListSection.style.display = 'none'
+        footer.style.display = 'none'
+        chatButton.style.display = 'none'
+
+        homeButton.style.display = 'block'
+        chatSection.style.display = 'block'
+
+        var userList = chatSection.querySelector('#user-list')
+
+        userList.innerHTML = ''
+
+        try {
+            var users = logic.retrieveUsers()
+
+            users.forEach(function (user) {
+                var item = document.createElement('li')
+
+                if (user.status === 'online')
+                    item.classList.add('user-list__item--online')
+                else if (user.status === 'offline')
+                    item.classList.add('user-list__item--offline')
+
+                item.innerText = user.username
+
+                userList.appendChild(item)
+            })
+        } catch (error) {
+            console.error(error)
+
+            alert(error.message)
+        }
+    }
+
+    homeButton.onclick = function () {
+        homeButton.style.display = 'none'
+        chatSection.style.display = 'none'
+
+        postListSection.style.display = ''
+        footer.style.display = ''
+        chatButton.style.display = ''
+    }
 })()
