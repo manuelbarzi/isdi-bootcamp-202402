@@ -112,7 +112,7 @@ var logic = (function () {
         return !!sessionStorage.userId
     }
 
-    function retrieveUsersWithStatus() {
+    function retrieveUsers() {
         var users = data.getAllUsers()
 
         var index = users.findIndex(function (user) {
@@ -136,48 +136,6 @@ var logic = (function () {
 
 
         return users
-    }
-
-    function sendMessageToUser(userId, text) {
-        validateText(userId, 'userId', true)
-        validateText(text, 'text')
-
-        // { id, users: [id, id], messages: [{ from: id, text, date }, { from: id, text, date }, ...] }
-
-        // find chat in chats (by user ids)
-        // if no chat yet, then create it
-        // add message in chat
-        // update or insert chat in chats
-        // save chats
-
-        var chat = data.findChat(function (chat) {
-            return chat.users.includes(userId) && chat.users.includes(sessionStorage.userId)
-        })
-
-        if (!chat)
-            chat = { users: [userId, sessionStorage.userId], messages: [] }
-
-        var message = { from: sessionStorage.userId, text: text, date: new Date().toISOString() }
-
-        chat.messages.push(message)
-
-        if (!chat.id)
-            data.insertChat(chat)
-        else
-            data.updateChat(chat)
-    }
-
-    function retrieveMessagesWithUser(userId) {
-        validateText(userId, 'userId', true)
-
-        var chat = data.findChat(function (chat) {
-            return chat.users.includes(userId) && chat.users.includes(sessionStorage.userId)
-        })
-
-        if (chat)
-            return chat.messages
-
-        return []
     }
 
     function createPost(image, text) {
@@ -226,23 +184,6 @@ var logic = (function () {
         })
     }
 
-    function modifyPost(postId, text) {
-        validateText(postId, 'postId', true)
-        validateText(text, 'text')
-
-        var post = data.findPost(function (post) {
-            return post.id === postId
-        })
-
-        if (!post) throw new Error('post not found')
-
-        if (post.author !== sessionStorage.userId) throw new Error('post does not belong to user')
-
-        post.text = text
-
-        data.updatePost(post)
-    }
-
     return {
         registerUser: registerUser,
         loginUser: loginUser,
@@ -250,14 +191,9 @@ var logic = (function () {
         logoutUser: logoutUser,
         getLoggedInUserId: getLoggedInUserId,
         isUserLoggedIn: isUserLoggedIn,
-
-        retrieveUsersWithStatus: retrieveUsersWithStatus,
-        sendMessageToUser: sendMessageToUser,
-        retrieveMessagesWithUser: retrieveMessagesWithUser,
-
+        retrieveUsers: retrieveUsers,
         createPost: createPost,
         retrievePosts: retrievePosts,
-        removePost: removePost,
-        modifyPost: modifyPost
+        removePost: removePost
     }
 })()

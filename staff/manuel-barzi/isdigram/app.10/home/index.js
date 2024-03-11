@@ -135,7 +135,7 @@
         userList.innerHTML = ''
 
         try {
-            var users = logic.retrieveUsersWithStatus()
+            var users = logic.retrieveUsers()
 
             users.forEach(function (user) {
                 var item = document.createElement('li')

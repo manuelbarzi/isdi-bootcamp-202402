@@ -11,21 +11,12 @@ var data = (function () {
         return JSON.parse(localStorage.users || '[]')
     }
 
+    function loadPosts() {
+        return JSON.parse(localStorage.posts || '[]')
+    }
 
     function saveUsers(users) {
         localStorage.users = JSON.stringify(users)
-    }
-
-    function loadChats() {
-        return JSON.parse(localStorage.chats || '[]')
-    }
-
-    function saveChats(chats) {
-        localStorage.chats = JSON.stringify(chats)
-    }
-
-    function loadPosts() {
-        return JSON.parse(localStorage.posts || '[]')
     }
 
     function savePosts(posts) {
@@ -78,50 +69,6 @@ var data = (function () {
         return users
     }
 
-    function findChat(callback) {
-        var chats = loadChats()
-
-        var chat = chats.find(callback)
-
-        return chat
-    }
-
-    function insertChat(chat) {
-        var chats = loadChats()
-
-        chat.id = generateId()
-
-        chats.push(chat)
-
-        saveChats(chats)
-    }
-
-    function printChats() {
-        var chats = loadChats()
-
-        console.table(chats)
-    }
-
-    function updateChat(chat) {
-        var chats = loadChats()
-
-        var index = chats.findIndex(function (chat2) {
-            return chat2.id === chat.id
-        })
-
-        if (index > - 1) {
-            chats.splice(index, 1, chat)
-
-            saveChats(chats)
-        }
-    }
-
-    function getAllChats() {
-        var chats = loadChats()
-
-        return chats
-    }
-
     function insertPost(post) {
         var posts = loadPosts()
 
@@ -156,44 +103,15 @@ var data = (function () {
         savePosts(posts)
     }
 
-    function updatePost(post) {
-        var posts = loadPosts()
-
-        var index = posts.findIndex(function (post2) {
-            return post2.id === post.id
-        })
-
-        if (index > - 1) {
-            posts.splice(index, 1, post)
-
-            savePosts(posts)
-        }
-    }
-
-    function printPosts() {
-        var posts = loadPosts()
-
-        console.table(posts)
-    }
-
     return {
         findUser: findUser,
         insertUser: insertUser,
         printUsers: printUsers,
         updateUser: updateUser,
         getAllUsers: getAllUsers,
-
-        findChat: findChat,
-        insertChat: insertChat,
-        printChats: printChats,
-        updateChat: updateChat,
-        getAllChats: getAllChats,
-
         insertPost: insertPost,
         getAllPosts: getAllPosts,
         findPost: findPost,
-        deletePost: deletePost,
-        updatePost: updatePost,
-        printPosts: printPosts
+        deletePost: deletePost
     }
 })()
