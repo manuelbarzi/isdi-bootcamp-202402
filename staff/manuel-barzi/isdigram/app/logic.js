@@ -60,7 +60,7 @@ var logic = (function () {
             status: 'offline',
         }
 
-        data.user.insertOne(user)
+        data.users.insertOne(user)
     }
 
     function loginUser(username, password) {
