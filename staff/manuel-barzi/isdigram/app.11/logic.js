@@ -45,7 +45,7 @@ var logic = (function () {
 
         // TODO input validation
 
-        var user = data.users.findOne(function (user) {
+        var user = data.findUser(function (user) {
             return user.email === email || user.username === username
         })
 
@@ -60,14 +60,14 @@ var logic = (function () {
             status: 'offline',
         }
 
-        data.user.insertOne(user)
+        data.insertUser(user)
     }
 
     function loginUser(username, password) {
         validateText(username, 'username', true)
         validatePassword(password, 'password')
 
-        var user = data.users.findOne(function (user) {
+        var user = data.findUser(function (user) {
             return user.username === username && user.password === password
         })
 
@@ -75,13 +75,13 @@ var logic = (function () {
 
         user.status = 'online'
 
-        data.users.updateOne(user)
+        data.updateUser(user)
 
         sessionStorage.userId = user.id
     }
 
     function retrieveUser() {
-        var user = data.users.findOne(function (user) {
+        var user = data.findUser(function (user) {
             return user.id === sessionStorage.userId
         })
 
@@ -91,7 +91,7 @@ var logic = (function () {
     }
 
     function logoutUser() {
-        var user = data.users.findOne(function (user) {
+        var user = data.findUser(function (user) {
             return user.id === sessionStorage.userId
         })
 
@@ -99,7 +99,7 @@ var logic = (function () {
 
         user.status = 'offline'
 
-        data.users.updateOne(user)
+        data.updateUser(user)
 
         delete sessionStorage.userId
     }
@@ -113,7 +113,7 @@ var logic = (function () {
     }
 
     function retrieveUsersWithStatus() {
-        var users = data.users.getAll()
+        var users = data.getAllUsers()
 
         var index = users.findIndex(function (user) {
             return user.id === sessionStorage.userId
@@ -150,7 +150,7 @@ var logic = (function () {
         // update or insert chat in chats
         // save chats
 
-        var chat = data.chats.findOne(function (chat) {
+        var chat = data.findChat(function (chat) {
             return chat.users.includes(userId) && chat.users.includes(sessionStorage.userId)
         })
 
@@ -170,7 +170,7 @@ var logic = (function () {
     function retrieveMessagesWithUser(userId) {
         validateText(userId, 'userId', true)
 
-        var chat = data.chats.findOne(function (chat) {
+        var chat = data.findChat(function (chat) {
             return chat.users.includes(userId) && chat.users.includes(sessionStorage.userId)
         })
 
@@ -193,14 +193,14 @@ var logic = (function () {
             date: new Date().toLocaleDateString('en-CA')
         }
 
-        data.posts.insertOne(post)
+        data.insertPost(post)
     }
 
     function retrievePosts() {
-        var posts = data.posts.getAll()
+        var posts = data.getAllPosts()
 
         posts.forEach(function (post) {
-            var user = data.users.findOne(function (user) {
+            var user = data.findUser(function (user) {
                 return user.id === post.author
             })
 
@@ -213,7 +213,7 @@ var logic = (function () {
     function removePost(postId) {
         validateText(postId, 'postId', true)
 
-        var post = data.posts.findOne(function (post) {
+        var post = data.findPost(function (post) {
             return post.id === postId
         })
 
@@ -230,7 +230,7 @@ var logic = (function () {
         validateText(postId, 'postId', true)
         validateText(text, 'text')
 
-        var post = data.posts.findOne(function (post) {
+        var post = data.findPost(function (post) {
             return post.id === postId
         })
 
@@ -240,7 +240,7 @@ var logic = (function () {
 
         post.text = text
 
-        data.posts.updateOne(post)
+        data.updatePost(post)
     }
 
     return {
