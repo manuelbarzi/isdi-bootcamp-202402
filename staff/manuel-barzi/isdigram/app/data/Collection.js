@@ -17,6 +17,12 @@ Collection.prototype._loadDocuments = function () {
 }
 
 Collection.prototype._saveDocuments = function (documents) {
+    if (!(documents instanceof Array)) throw new TypeError('documents is not an array')
+
+    documents.forEach(function (document) {
+        if (!(document instanceof Object)) throw new TypeError('a document in documents is not an object')
+    })
+
     var documentsJSON = JSON.stringify(documents)
 
     localStorage[this.name] = documentsJSON
@@ -25,6 +31,8 @@ Collection.prototype._saveDocuments = function (documents) {
 // CRUD
 
 Collection.prototype.findOne = function (callback) {
+    if (typeof callback !== 'function') throw new TypeError('callback is not a function')
+
     var documents = this._loadDocuments()
 
     var document = documents.find(callback)

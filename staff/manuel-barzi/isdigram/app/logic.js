@@ -11,7 +11,7 @@ var logic = (function () {
     // helpers
 
     function validateText(text, explain, checkEmptySpaceInside) {
-        if (typeof text !== 'string') throw new Error(explain + ' ' + text + ' is not a string')
+        if (typeof text !== 'string') throw new TypeError(explain + ' ' + text + ' is not a string')
         if (!text.trim().length) throw new Error(explain + ' >' + text + '< is empty or blank')
 
         if (checkEmptySpaceInside)
@@ -19,7 +19,8 @@ var logic = (function () {
     }
 
     function validateDate(date, explain) {
-        if (!DATE_REGEX.test(date)) throw new Error(explain + ' ' + date + ' is not a date')
+        if (typeof date !== 'string') throw new TypeError(explain + ' ' + date + ' is not a string')
+        if (!DATE_REGEX.test(date)) throw new Error(explain + ' ' + date + ' does not have a valid format')
     }
 
     function validateEmail(email, explain) {
@@ -68,10 +69,12 @@ var logic = (function () {
         validatePassword(password, 'password')
 
         var user = data.users.findOne(function (user) {
-            return user.username === username && user.password === password
+            return user.username === username
         })
 
-        if (!user) throw new Error('wrong credentials')
+        if (!user) throw new Error('user not found')
+
+        if (user.password !== password) throw new Error('wrong password')
 
         user.status = 'online'
 
