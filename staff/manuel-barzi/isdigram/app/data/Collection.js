@@ -28,6 +28,14 @@ Collection.prototype._saveDocuments = function (documents) {
     localStorage[this.name] = documentsJSON
 }
 
+Collection.prototype._backup = function () {
+    localStorage[this.name + '-backup'] = localStorage[this.name]
+}
+
+Collection.prototype._restore = function () {
+    localStorage[this.name] = localStorage[this.name + '-backup']
+}
+
 // CRUD
 
 Collection.prototype.findOne = function (callback) {

@@ -18,6 +18,9 @@
     var chatSection = document.querySelector('#chat-section')
     var footer = document.querySelector('#footer')
     var homeButton = document.querySelector('#home-button')
+    var editPostSection = document.querySelector('#edit-post-section')
+    var editPostCancelButton = editPostSection.querySelector('#edit-post-cancel-button')
+    var editPostForm = editPostSection.querySelector('form')
 
     try {
         var user = logic.retrieveUser()
@@ -27,6 +30,15 @@
         console.error(error)
 
         alert(error.message)
+
+        try {
+            logic.logoutUser()
+
+        } catch (error) {
+            logic.cleanUpLoggedInUserId()
+        }
+
+        location.href = '../login'
     }
 
     logoutButton.onclick = function () {
@@ -108,7 +120,39 @@
                             }
                     }
 
-                    article.appendChild(deleteButton)
+                    var editButton = document.createElement('button')
+
+                    editButton.innerText = '📝'
+
+                    editButton.onclick = function () {
+                        var textInput = editPostForm.querySelector('#text')
+
+                        textInput.value = post.text
+
+                        editPostForm.onsubmit = function (event) {
+                            event.preventDefault()
+
+                            var text = textInput.value
+
+                            try {
+                                logic.modifyPost(post.id, text)
+
+                                editPostForm.reset()
+
+                                editPostSection.style.display = ''
+
+                                renderPosts()
+                            } catch (error) {
+                                console.error(error)
+
+                                alert(error.message)
+                            }
+                        }
+
+                        editPostSection.style.display = 'block'
+                    }
+
+                    article.append(deleteButton, editButton)
                 }
 
                 postListSection.appendChild(article)
@@ -163,5 +207,9 @@
         postListSection.style.display = ''
         footer.style.display = ''
         chatButton.style.display = ''
+    }
+
+    editPostCancelButton.onclick = function () {
+        editPostSection.style.display = ''
     }
 })()

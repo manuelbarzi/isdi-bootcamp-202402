@@ -1,13 +1,13 @@
 describe('logic', function () {
     describe('registerUser', function () {
         it('succeeds a new user', function () {
-            data.users.deleteOne(function (user) {
+            db.users.deleteOne(function (user) {
                 return user.username === 'peperoni'
             })
 
             logic.registerUser('Pepe Roni', '2000-01-01', 'pepe@roni.com', 'peperoni', '123qwe123')
 
-            var user = data.users.findOne(function (user) {
+            var user = db.users.findOne(function (user) {
                 return user.username === 'peperoni'
             })
 
@@ -20,11 +20,11 @@ describe('logic', function () {
         })
 
         it('fails on existing users', function () {
-            data.users.deleteOne(function (user) {
+            db.users.deleteOne(function (user) {
                 return user.username === 'peperoni'
             })
 
-            data.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
+            db.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
 
             var errorThrown
 
@@ -95,19 +95,19 @@ describe('logic', function () {
 
     describe('loginUser', function () {
         it('succeeds on existing user and correct credentials', function () {
-            data.users.deleteOne(function (user) {
+            db.users.deleteOne(function (user) {
                 return user.username === 'peperoni'
             })
 
-            data.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
+            db.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
 
-            var user = data.users.findOne(function (user) { return user.username === 'peperoni' })
+            var user = db.users.findOne(function (user) { return user.username === 'peperoni' })
 
             logic.loginUser('peperoni', '123qwe123')
 
             expect(sessionStorage.userId).toBe(user.id)
 
-            var user = data.users.findOne(function (user) {
+            var user = db.users.findOne(function (user) {
                 return user.id === sessionStorage.userId
             })
 
@@ -115,11 +115,11 @@ describe('logic', function () {
         })
 
         it('fails on existing user and incorrect password', function () {
-            data.users.deleteOne(function (user) {
+            db.users.deleteOne(function (user) {
                 return user.username === 'peperoni'
             })
 
-            data.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
+            db.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
 
             var errorThrown
 
@@ -134,11 +134,11 @@ describe('logic', function () {
         })
 
         it('fails on existing user and incorrect username', function () {
-            data.users.deleteOne(function (user) {
+            db.users.deleteOne(function (user) {
                 return user.username === 'peperoni'
             })
 
-            data.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
+            db.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
 
             var errorThrown
 

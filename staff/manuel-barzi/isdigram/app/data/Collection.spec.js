@@ -37,7 +37,7 @@ describe('Collection', function () {
             })
 
             it('loads data on non-empty collection', function () {
-                localStorage.cars = '[{ "brand": "porsche", "model": "911" }, { "brand": "fiat", "model": "500" }]'
+                localStorage.cars = '[{"brand":"porsche","model":"911"},{"brand":"fiat","model":"500"}]'
 
                 var cars = new Collection('cars')
 
@@ -107,6 +107,34 @@ describe('Collection', function () {
 
                 expect(errorThrown).toBeInstanceOf(TypeError)
                 expect(errorThrown.message).toBe('a document in documents is not an object')
+            })
+        })
+
+        describe('_backup', function () {
+            it('backs up the collection json', function () {
+                delete localStorage['cars-backup']
+
+                localStorage.cars = '[{"brand":"porsche","model":"911"},{"brand":"fiat","model":"500"}]'
+
+                var cars = new Collection('cars')
+
+                cars._backup()
+
+                expect(localStorage['cars-backup']).toBe(localStorage.cars)
+            })
+        })
+
+        describe('_restore', function () {
+            it('restores the collection json', function () {
+                delete localStorage['cars']
+
+                localStorage['cars-backup'] = '[{"brand":"porsche","model":"911"},{"brand":"fiat","model":"500"}]'
+
+                var cars = new Collection('cars')
+
+                cars._restore()
+
+                expect(localStorage.cars).toBe(localStorage['cars-backup'])
             })
         })
     })
