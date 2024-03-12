@@ -90,7 +90,7 @@ Collection.prototype.getAll = function () {
     return documents
 }
 
-Collection.prototype.print = function () {
+Collection.prototype.printAll = function () {
     var document = this._loadDocuments()
 
     console.table(document)

@@ -169,9 +169,9 @@ var logic = (function () {
         chat.messages.push(message)
 
         if (!chat.id)
-            db.chats.insertOne(chat)
+            db.insertChat(chat)
         else
-            db.chats.updateOne(chat)
+            db.updateChat(chat)
     }
 
     function retrieveMessagesWithUser(userId) {
