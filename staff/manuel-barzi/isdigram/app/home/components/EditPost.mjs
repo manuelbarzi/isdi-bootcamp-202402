@@ -30,7 +30,7 @@ class EditPost extends Component {
 
         const editButton = new Button
         editButton.setType('submit')
-        editButton.setText('Edit')
+        editButton.setText('Save')
 
         form.add(textLabel, textInput, editButton)
 

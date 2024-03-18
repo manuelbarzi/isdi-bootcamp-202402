@@ -64,31 +64,19 @@ class CreatePost extends Component {
         })
 
         this._onPostCreatedCallback = null
-
-        CreatePost.active = true
     }
-
-    static active = false
 
 
     onCancelClick(callback) {
         if (typeof callback !== 'function') throw new TypeError('callback is not a function')
 
-        this._cancelButton.onClick(() => {
-            CreatePost.active = false
-
-            callback()
-        })
+        this._cancelButton.onClick(() => callback())
     }
 
     onPostCreated(callback) {
         if (typeof callback !== 'function') throw new TypeError('callback is not a function')
 
-        this._onPostCreatedCallback = () => {
-            CreatePost.active = false
-
-            callback()
-        }
+        this._onPostCreatedCallback = callback
     }
 }
 

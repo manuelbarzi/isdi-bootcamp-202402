@@ -146,7 +146,7 @@ function sendMessageToUser(userId, text) {
     // update or insert chat in chats
     // save chats
 
-    let chat = db.chats.findOne(chat => chat.users.includes(userId) && chat.users.includes(sessionStorage.userId))
+    const chat = db.chats.findOne(chat => chat.users.includes(userId) && chat.users.includes(sessionStorage.userId))
 
     if (!chat)
         chat = { users: [userId, sessionStorage.userId], messages: [] }

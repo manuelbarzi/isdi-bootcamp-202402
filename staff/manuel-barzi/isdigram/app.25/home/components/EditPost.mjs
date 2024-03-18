@@ -8,24 +8,16 @@ import Input from '../../core/Input.mjs'
 import Button from '../../core/Button.mjs'
 import Form from '../../core/Form.mjs'
 
-class CreatePost extends Component {
-    constructor() {
+class EditPost extends Component {
+    constructor(post) {
         super('section')
 
-        this.addClass('create-post')
+        this.addClass('edit-post')
 
         const title = new Component('h2')
-        title.setText('Create Post')
+        title.setText('Edit Post')
 
         const form = new Form
-
-        const imageLabel = new Label
-        imageLabel.setFor('image')
-        imageLabel.setText('Image')
-
-        const imageInput = new Input
-        imageInput.setId('image')
-        imageInput.setType('text')
 
         const textLabel = new Label
         textLabel.setFor('text')
@@ -34,12 +26,13 @@ class CreatePost extends Component {
         const textInput = new Input
         textInput.setId('text')
         textInput.setType('text')
+        textInput.setValue(post.text)
 
-        const createButton = new Button
-        createButton.setType('submit')
-        createButton.setText('Create')
+        const editButton = new Button
+        editButton.setType('submit')
+        editButton.setText('Edit')
 
-        form.add(imageLabel, imageInput, textLabel, textInput, createButton)
+        form.add(textLabel, textInput, editButton)
 
         const cancelButton = new Button
         cancelButton.setText('Cancel')
@@ -51,45 +44,43 @@ class CreatePost extends Component {
         form.onSubmit(event => {
             event.preventDefault()
 
-            const image = imageInput.getValue()
             const text = textInput.getValue()
 
             try {
-                logic.createPost(image, text)
+                logic.modifyPost(post.id, text)
 
-                this._onPostCreatedCallback()
+                this._onPostEditedCallback()
             } catch (error) {
                 utils.showFeedback(error)
             }
         })
 
-        this._onPostCreatedCallback = null
+        this._onPostEditedCallback = null
 
-        CreatePost.active = true
+        EditPost.active = true
     }
 
     static active = false
-
 
     onCancelClick(callback) {
         if (typeof callback !== 'function') throw new TypeError('callback is not a function')
 
         this._cancelButton.onClick(() => {
-            CreatePost.active = false
+            EditPost.active = false
 
             callback()
         })
     }
 
-    onPostCreated(callback) {
+    onPostEdited(callback) {
         if (typeof callback !== 'function') throw new TypeError('callback is not a function')
 
-        this._onPostCreatedCallback = () => {
-            CreatePost.active = false
+        this._onPostEditedCallback = () => {
+            EditPost.active = false
 
             callback()
         }
     }
 }
 
-export default CreatePost
+export default EditPost
