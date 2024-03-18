@@ -14,10 +14,6 @@ class Input extends Component {
     getValue() {
         return this._container.value
     }
-
-    setValue(value) {
-        this._container.value = value
-    }
 }
 
 export default Input

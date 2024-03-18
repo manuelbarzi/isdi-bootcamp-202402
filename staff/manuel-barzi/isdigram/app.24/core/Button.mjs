@@ -1,8 +1,8 @@
 import Component from './Component.mjs'
 
-class Input extends Component {
+class Button extends Component {
     constructor() {
-        super('input')
+        super('button')
     }
 
     setType(type) {
@@ -10,14 +10,6 @@ class Input extends Component {
 
         this._container.type = type
     }
-
-    getValue() {
-        return this._container.value
-    }
-
-    setValue(value) {
-        this._container.value = value
-    }
 }
 
-export default Input
+export default Button

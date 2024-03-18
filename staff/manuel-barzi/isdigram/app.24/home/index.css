@@ -44,7 +44,8 @@ img {
   padding: 5vw;
 }
 
-.edit-post {
+#edit-post-section {
+  display: none;
   margin-bottom: 50px;
   position: fixed;
   bottom: 0;
@@ -53,16 +54,6 @@ img {
   width: 100%;
   box-sizing: border-box;
   padding: 5vw;
-}
-
-.edit-post-blocking-layer {
-  background-color: red;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
 }
 
 #post-list-section {

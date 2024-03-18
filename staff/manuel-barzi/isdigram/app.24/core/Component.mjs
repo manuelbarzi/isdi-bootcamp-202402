@@ -1,5 +1,5 @@
 class Component {
-    constructor(tagName = 'div') {
+    constructor(tagName) {
         this._container = document.createElement(tagName)
     }
 
