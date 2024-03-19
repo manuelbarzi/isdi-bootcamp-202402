@@ -12,20 +12,6 @@ form {
   flex-direction: column;
 }
 
-.round-button {
-  border-radius: 5px;
-  border: 1px solid black;
-  margin: 10px 0;
-}
-
-.submit-button {
-  background-color: gold;
-}
-
-.cancel-button {
-  background-color: smoke;
-}
-
 .main {
   margin-bottom: 50px;
 }

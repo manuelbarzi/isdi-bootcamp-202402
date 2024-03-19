@@ -6,8 +6,7 @@ import Component from '../../core/Component.mjs'
 import Form from '../../core/Form.mjs'
 import Label from '../../core/Label.mjs'
 import Input from '../../core/Input.mjs'
-
-import SubmitButton from '../../library/SubmitButton.mjs'
+import Button from '../../core/Button.mjs'
 
 class Chat extends Component {
     constructor() {
@@ -97,7 +96,7 @@ class Chat extends Component {
                     const textInput = new Input
                     textInput.setId('text')
 
-                    const sendButton = new SubmitButton
+                    const sendButton = new Button
                     sendButton.setType('submit')
                     sendButton.setText('Send')
 

@@ -5,21 +5,27 @@ import logic from '../../logic.mjs'
 import Component from '../../core/Component.mjs'
 import Label from '../../core/Label.mjs'
 import Input from '../../core/Input.mjs'
+import Button from '../../core/Button.mjs'
 import Form from '../../core/Form.mjs'
 
-import SubmitButton from '../../library/SubmitButton.mjs'
-import CancelButton from '../../library/CancelButton.mjs'
-
-class EditPost extends Component {
-    constructor(post) {
+class CreatePost extends Component {
+    constructor() {
         super('section')
 
-        this.addClass('edit-post')
+        this.addClass('create-post')
 
         const title = new Component('h2')
-        title.setText('Edit Post')
+        title.setText('Create Post')
 
         const form = new Form
+
+        const imageLabel = new Label
+        imageLabel.setFor('image')
+        imageLabel.setText('Image')
+
+        const imageInput = new Input
+        imageInput.setId('image')
+        imageInput.setType('text')
 
         const textLabel = new Label
         textLabel.setFor('text')
@@ -28,15 +34,14 @@ class EditPost extends Component {
         const textInput = new Input
         textInput.setId('text')
         textInput.setType('text')
-        textInput.setValue(post.text)
 
-        const editButton = new SubmitButton
-        editButton.setType('submit')
-        editButton.setText('Save')
+        const createButton = new Button
+        createButton.setType('submit')
+        createButton.setText('Create')
 
-        form.add(textLabel, textInput, editButton)
+        form.add(imageLabel, imageInput, textLabel, textInput, createButton)
 
-        const cancelButton = new CancelButton
+        const cancelButton = new Button
         cancelButton.setText('Cancel')
 
         this._cancelButton = cancelButton
@@ -46,43 +51,45 @@ class EditPost extends Component {
         form.onSubmit(event => {
             event.preventDefault()
 
+            const image = imageInput.getValue()
             const text = textInput.getValue()
 
             try {
-                logic.modifyPost(post.id, text)
+                logic.createPost(image, text)
 
-                this._onPostEditedCallback()
+                this._onPostCreatedCallback()
             } catch (error) {
                 utils.showFeedback(error)
             }
         })
 
-        this._onPostEditedCallback = null
+        this._onPostCreatedCallback = null
 
-        EditPost.active = true
+        CreatePost.active = true
     }
 
     static active = false
+
 
     onCancelClick(callback) {
         if (typeof callback !== 'function') throw new TypeError('callback is not a function')
 
         this._cancelButton.onClick(() => {
-            EditPost.active = false
+            CreatePost.active = false
 
             callback()
         })
     }
 
-    onPostEdited(callback) {
+    onPostCreated(callback) {
         if (typeof callback !== 'function') throw new TypeError('callback is not a function')
 
-        this._onPostEditedCallback = () => {
-            EditPost.active = false
+        this._onPostCreatedCallback = () => {
+            CreatePost.active = false
 
             callback()
         }
     }
 }
 
-export default EditPost
+export default CreatePost
