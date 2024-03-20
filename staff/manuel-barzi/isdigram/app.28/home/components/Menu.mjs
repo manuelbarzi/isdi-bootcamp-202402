@@ -23,7 +23,7 @@ class Menu extends Component {
         exitButton.onClick(() => {
             logic.logoutUser()
 
-            location.href = '../login/index.html'
+            location.href = '../login'
         })
 
         this.add(chatButton, exitButton)

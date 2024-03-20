@@ -3,7 +3,7 @@ import logic from '../logic.mjs'
 import Home from './Home.mjs'
 
 if (!logic.isUserLoggedIn())
-    location.href = '../login/index.html'
+    location.href = '../login'
 else {
     const home = new Home
 

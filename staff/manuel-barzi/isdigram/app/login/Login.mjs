@@ -49,7 +49,7 @@ class Login extends Component {
 
                 form.reset()
 
-                location.href = '../home'
+                location.href = '../home/index.html'
             } catch (error) {
                 utils.showFeedback(error)
             }
@@ -60,7 +60,7 @@ class Login extends Component {
 
         const link = new Link
         link.setText('Register')
-        link.setHref('../register')
+        link.setHref('../register/index.html')
 
         this.add(title, form, link)
     }

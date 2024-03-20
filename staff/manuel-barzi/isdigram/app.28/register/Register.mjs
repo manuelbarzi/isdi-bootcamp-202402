@@ -75,7 +75,7 @@ class Register extends Component {
 
                 form.reset()
 
-                location.href = '../login/index.html'
+                location.href = '../login'
             } catch (error) {
                 utils.showFeedback(error)
             }
@@ -86,7 +86,7 @@ class Register extends Component {
 
         const link = new Link
         link.setText('Login')
-        link.setHref('../login/index.html')
+        link.setHref('../login')
 
         this.add(title, form, link)
     }
