@@ -8,7 +8,6 @@ import PostList from '../components/PostList.mjs'
 import Footer from '../components/Footer.mjs'
 import CreatePost from '../components/CreatePost.mjs'
 import Chat from '../components/Chat.mjs'
-import EditPost from '../components/EditPost.mjs'
 
 class Home extends Component {
     constructor() {
@@ -32,22 +31,18 @@ class Home extends Component {
         const chat = new Chat
 
         menu.onChatClick(() => {
-            PostList.active = false
+            postList.stopAutoRefresh()
 
             this.remove(postList)
             this.remove(footer)
-
-            Chat.active = true
 
             this.add(chat)
         })
 
         menu.onHomeClick(() => {
-            Chat.active = false
+            chat.stopAutoRefresh()
 
             this.remove(chat)
-
-            PostList.active = true
 
             this.add(postList)
             this.add(footer)
@@ -63,22 +58,6 @@ class Home extends Component {
         this.add(menu)
 
         const postList = new PostList
-
-        postList.onEditPostClick(post => {
-            if (!EditPost.active) {
-                const editPost = new EditPost(post)
-
-                editPost.onCancelClick(() => this.remove(editPost))
-
-                editPost.onPostEdited(() => {
-                    this.remove(editPost)
-
-                    postList.refresh()
-                })
-
-                this.add(editPost)
-            }
-        })
 
         this.add(postList)
 

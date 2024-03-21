@@ -32,22 +32,22 @@ class Home extends Component {
         const chat = new Chat
 
         menu.onChatClick(() => {
-            PostList.active = false
+            postList.stopAutoRefresh()
 
             this.remove(postList)
             this.remove(footer)
 
-            Chat.active = true
+            chat.startAutoRefresh()
 
             this.add(chat)
         })
 
         menu.onHomeClick(() => {
-            Chat.active = false
+            chat.stopAutoRefresh()
 
             this.remove(chat)
 
-            PostList.active = true
+            postList.startAutoRefresh()
 
             this.add(postList)
             this.add(footer)

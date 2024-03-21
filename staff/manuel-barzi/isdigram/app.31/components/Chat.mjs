@@ -46,12 +46,16 @@ class Chat extends Component {
         })
 
         this.add(userList)
-
-        Chat.active = true
     }
 
-    static set active(status) {
-        MessageList.active = status
+    startAutoRefresh() {
+        if (this._messageList)
+            this._messageList.startAutoRefresh()
+    }
+
+    stopAutoRefresh() {
+        if (this._messageList)
+            this._messageList.stopAutoRefresh()
     }
 }
 

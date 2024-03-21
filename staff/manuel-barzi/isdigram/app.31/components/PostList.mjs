@@ -11,19 +11,7 @@ class PostList extends Component {
 
         this.refresh()
 
-        // setInterval(() => {
-        //     console.count('post-list interval')
-
-        //     if (PostList.active) {
-        //         console.count('post-list refresh')
-
-        //         this.refresh()
-        //     }
-        // }, 5000)
-
-        setInterval(() => PostList.active && this.refresh(), 5000)
-
-        PostList.active = true
+        this.startAutoRefresh()
     }
 
     refresh() {
@@ -48,7 +36,15 @@ class PostList extends Component {
         }
     }
 
-    static active = false
+    startAutoRefresh() {
+        this.stopAutoRefresh()
+
+        this._refreshIntervalId = setInterval(() => this.refresh(), 5000)
+    }
+
+    stopAutoRefresh() {
+        clearInterval(this._refreshIntervalId)
+    }
 
     onEditPostClick(callback) {
         if (typeof callback !== 'function') throw new TypeError('callback is not a function')
