@@ -54,8 +54,8 @@ class Home extends Component {
         })
 
         menu.onLogoutClick(() => {
-            postList.stopAutoRefresh()
-            chat.stopAutoRefresh()
+            PostList.active = false
+            Chat.active = false
 
             this._onLogoutCallback()
         })
