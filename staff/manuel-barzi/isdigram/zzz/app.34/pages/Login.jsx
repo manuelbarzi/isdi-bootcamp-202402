@@ -10,12 +10,17 @@ class Login extends React.Component {
             <form onSubmit={function (event) {
                 event.preventDefault()
 
-                console.log('hola mundo', this)
+                var form = event.target
+
+                var username = form.username.value
+                var password = form.password.value
+
+                console.log('hola mundo', username, password)
             }}>
                 <label>Username</label>
-                <input id="username" />
+                <input name="username" />
                 <label>Password</label>
-                <input type="password" id="password" />
+                <input type="password" name="password" />
                 <button className="round-button" type="submit">Login</button>
             </form>
 
