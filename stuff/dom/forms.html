@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>forms</title>
+</head>
+
+<body>
+    <main>
+        <h1>Login</h1>
+
+        <form>
+            <label>Username</label>
+            <input id="username" />
+            <label>Password</label>
+            <input type="password" id="password" />
+            <button class="round-button" type="submit">Login</button>
+        </form>
+
+        <a href="">Register</a>
+    </main>
+
+    <script>
+        const form = document.querySelector('form')
+
+        form.onsubmit = function (event) {
+            event.preventDefault()
+
+            // const theFormInstance = form
+            // const theFormInstance = this
+            const theFormInstance = event.target
+
+            // const usernameInput = theFormInstance.querySelector('#username')
+            const usernameInput = theFormInstance[0]
+            // const usernameInput = theFormInstance.username
+            const username = usernameInput.value
+
+            // const passwordInput = theFormInstance.querySelector('#password')
+            const passwordInput = theFormInstance[1]
+            // const passwordInput = theFormInstance.password
+            const password = passwordInput.value
+
+            console.log(username, password)
+        }
+    </script>
+</body>
+
+</html>
