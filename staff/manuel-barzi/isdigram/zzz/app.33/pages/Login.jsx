@@ -6,12 +6,7 @@ class Login extends React.Component {
     render() {
         return <main>
             <h1>Login</h1>
-
-            <form onSubmit={function (event) {
-                event.preventDefault()
-
-                console.log('hola mundo', this)
-            }}>
+            <form>
                 <label>Username</label>
                 <input id="username" />
                 <label>Password</label>
