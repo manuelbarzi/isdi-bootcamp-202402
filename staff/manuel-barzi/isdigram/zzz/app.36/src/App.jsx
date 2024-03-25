@@ -1,5 +1,3 @@
-import logic from './logic'
-
 import { Component } from 'react'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
@@ -10,7 +8,7 @@ class App extends Component {
   constructor() {
     super()
 
-    this.state = { view: logic.isUserLoggedIn() ? 'home' : 'landing' }
+    this.state = { view: 'landing' }
   }
 
   render() {
@@ -21,7 +19,7 @@ class App extends Component {
     else if (this.state.view === 'register')
       return <Register onLoginClick={() => this.setState({ view: 'login' })} onUserRegistered={() => this.setState({ view: 'login' })} />
     else if (this.state.view === 'home')
-      return <Home /> // new Home().render(...)
+      return <Home />
     else
       return <h1>🤨</h1>
   }
