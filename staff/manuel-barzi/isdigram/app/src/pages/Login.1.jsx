@@ -11,7 +11,7 @@ class Login extends Component {
         super()
     }
 
-    handleSubmit = event => {
+    handleSubmit(event) {
         event.preventDefault()
 
         const form = event.target
@@ -32,7 +32,7 @@ class Login extends Component {
         }
     }
 
-    handleRegisterClick = event => {
+    handleRegisterClick(event) {
         event.preventDefault()
 
         this.props.onRegisterClick()
@@ -44,7 +44,7 @@ class Login extends Component {
         return <main>
             <h1>Login</h1>
 
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit.bind(this)}>
                 <label htmlFor="username">Username</label>
                 <input id="username" />
 
@@ -54,7 +54,7 @@ class Login extends Component {
                 <button className="round-button" type="submit">Login</button>
             </form>
 
-            <a href="" onClick={this.handleRegisterClick}>Register</a>
+            <a href="" onClick={this.handleRegisterClick.bind(this)}>Register</a>
         </main>
     }
 }

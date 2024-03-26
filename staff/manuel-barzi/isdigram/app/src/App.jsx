@@ -27,17 +27,27 @@ class App extends Component {
     logger.debug('App -> componentDidMount')
   }
 
+  goToLogin = () => this.setState({ view: 'login' })
+
+  handleLoginClick = () => this.goToLogin()
+
+  handleRegisterClick = () => this.setState({ view: 'register' })
+
+  handleUserLoggedIn = () => this.setState({ view: 'home' })
+
+  handleUserLoggedOut = () => this.goToLogin()
+
   render() {
     logger.debug('App -> render')
 
     if (this.state.view === 'landing')
-      return <Landing onLoginClick={() => this.setState({ view: 'login' })} onRegisterClick={() => this.setState({ view: 'register' })} />
+      return <Landing onLoginClick={this.handleLoginClick} onRegisterClick={this.handleRegisterClick} />
     else if (this.state.view === 'login')
-      return <Login onRegisterClick={() => this.setState({ view: 'register' })} onUserLoggedIn={() => this.setState({ view: 'home' })} />
+      return <Login onRegisterClick={this.handleRegisterClick} onUserLoggedIn={this.handleUserLoggedIn} />
     else if (this.state.view === 'register')
-      return <Register onLoginClick={() => this.setState({ view: 'login' })} onUserRegistered={() => this.setState({ view: 'login' })} />
+      return <Register onLoginClick={this.handleLoginClick} onUserRegistered={this.handleLoginClick} />
     else if (this.state.view === 'home')
-      return <Home /> // new Home().render(...)
+      return <Home onUserLoggedOut={this.handleUserLoggedOut} /> // new Home().render(...)
     else
       return <h1>🤨</h1>
   }

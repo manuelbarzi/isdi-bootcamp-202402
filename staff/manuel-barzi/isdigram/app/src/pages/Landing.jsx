@@ -9,21 +9,25 @@ class Landing extends Component {
         super()
     }
 
+    handleLoginClick = event => {
+        event.preventDefault()
+
+        this.props.onLoginClick()
+    }
+
+    handleRegisterClick = event => {
+        event.preventDefault()
+
+        this.props.onRegisterClick()
+    }
+
     render() {
         logger.debug('Landing -> render')
 
         return <main>
             <h1>Landing</h1>
 
-            <a href="" onClick={event => {
-                event.preventDefault()
-
-                this.props.onLoginClick()
-            }}>Login</a> or <a href="" onClick={event => {
-                event.preventDefault()
-
-                this.props.onRegisterClick()
-            }}>Register</a>
+            <a href="" onClick={this.handleLoginClick}>Login</a> or <a href="" onClick={this.handleRegisterClick}>Register</a>
         </main>
     }
 }

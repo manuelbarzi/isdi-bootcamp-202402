@@ -9,9 +9,12 @@ class Login extends Component {
         logger.debug('Login')
 
         super()
+
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleRegisterClick = this.handleRegisterClick.bind(this)
     }
 
-    handleSubmit = event => {
+    handleSubmit(event) {
         event.preventDefault()
 
         const form = event.target
@@ -32,7 +35,7 @@ class Login extends Component {
         }
     }
 
-    handleRegisterClick = event => {
+    handleRegisterClick(event) {
         event.preventDefault()
 
         this.props.onRegisterClick()

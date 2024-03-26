@@ -10,24 +10,28 @@ class Logger {
     // }
     level = Logger.DEBUG
 
+    #buildMessage(messages) {
+        return `${new Date().toISOString()} - ${messages.join(' ')}`
+    }
+
     debug(...messages) {
-        this.level < Logger.INFO && console.debug(`%c${messages.join(' ')}`, 'color: greenyellow')
+        this.level < Logger.INFO && console.debug(`%c${this.#buildMessage(messages)}`, 'color: greenyellow')
     }
 
     info(...messages) {
-        this.level < Logger.WARN && console.info(`%c${messages.join(' ')}`, 'color: dodgerblue')
+        this.level < Logger.WARN && console.info(`%c${this.#buildMessage(messages)}`, 'color: dodgerblue')
     }
 
     warn(...messages) {
-        this.level < Logger.ERROR && console.warn(`%c${messages.join(' ')}`, 'color: orange')
+        this.level < Logger.ERROR && console.warn(`%c${this.#buildMessage(messages)}`, 'color: orange')
     }
 
     error(...messages) {
-        this.level < Logger.FATAL && console.error(`%c${messages.join(' ')}`, 'color: tomato')
+        this.level < Logger.FATAL && console.error(`%c${this.#buildMessage(messages)}`, 'color: tomato')
     }
 
     fatal(...messages) {
-        console.error(`%c${messages.join(' ')}`, 'background-color: red; color: white; padding: 0 .5rem')
+        console.error(`%c${this.#buildMessage(messages)}`, 'background-color: red; color: white; padding: 0 .5rem')
     }
 }
 

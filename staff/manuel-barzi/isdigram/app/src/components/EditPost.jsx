@@ -4,19 +4,19 @@ import logic from '../logic'
 
 import { Component } from 'react'
 
-class CreatePost extends Component {
+class EditPost extends Component {
     constructor() {
-        logger.debug('CreatePost')
+        logger.debug('EditPost')
 
         super()
     }
 
     componentDidMount() {
-        logger.debug('CreatePost -> componentDidMount')
+        logger.debug('EditPost -> componentDidMount')
     }
 
     componentWillUnmount() {
-        logger.debug('CreatePost -> componentWillUnmount')
+        logger.debug('EditPost -> componentWillUnmount')
     }
 
     handleSubmit = event => {
@@ -24,15 +24,16 @@ class CreatePost extends Component {
 
         const form = event.target
 
-        const image = form.image.value
         const text = form.text.value
 
+        logger.debug('EditPost -> handleSubmit', text)
+
         try {
-            logic.createPost(image, text)
+            logic.modifyPost(this.props.post.id, text)
 
             form.reset()
 
-            this.props.onPostCreated()
+            this.props.onPostEdited()
         } catch (error) {
             showFeedback(error)
         }
@@ -41,17 +42,14 @@ class CreatePost extends Component {
     handleCancelClick = () => this.props.onCancelClick()
 
     render() {
-        logger.debug('CreatePost -> render')
+        logger.debug('EditPost -> render')
 
-        return <section className="create-post">
+        return <section className="edit-post">
             <form onSubmit={this.handleSubmit}>
-                <label>Image</label>
-                <input id="image" type="text" />
-
                 <label>Text</label>
-                <input id="text" type="text" />
+                <input id="text" type="text" defaultValue={this.props.post.text} />
 
-                <button className="round-button submit-button" type="submit">Create</button>
+                <button className="round-button submit-button" type="submit">Edit</button>
             </form>
 
             <button className="round-button cancel-button" onClick={this.handleCancelClick}>Cancel</button>
@@ -59,4 +57,4 @@ class CreatePost extends Component {
     }
 }
 
-export default CreatePost
+export default EditPost
