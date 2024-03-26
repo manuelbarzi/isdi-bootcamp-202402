@@ -1,4 +1,4 @@
-import { logger, showFeedback } from '../utils'
+import utils from '../utils'
 
 import logic from '../logic'
 
@@ -6,14 +6,10 @@ import { Component } from 'react'
 
 class Login extends Component {
     constructor() {
-        logger.debug('Login')
-
         super()
     }
 
     render() {
-        logger.debug('Login -> render')
-
         return <main>
             <h1>Login</h1>
 
@@ -25,8 +21,6 @@ class Login extends Component {
                 const username = form.username.value
                 const password = form.password.value
 
-                logger.debug('Login -> submit', username, password)
-
                 try {
                     logic.loginUser(username, password)
 
@@ -34,7 +28,7 @@ class Login extends Component {
 
                     this.props.onUserLoggedIn()
                 } catch (error) {
-                    showFeedback(error)
+                    utils.showFeedback(error)
                 }
             }}>
                 <label htmlFor="username">Username</label>

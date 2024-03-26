@@ -1,4 +1,4 @@
-import { logger, showFeedback } from '../utils'
+import utils from '../utils'
 
 import logic from '../logic'
 
@@ -6,22 +6,10 @@ import { Component } from 'react'
 
 class CreatePost extends Component {
     constructor() {
-        logger.debug('CreatePost')
-
         super()
     }
 
-    componentDidMount() {
-        logger.debug('CreatePost -> componentDidMount')
-    }
-
-    componentWillUnmount() {
-        logger.debug('CreatePost -> componentWillUnmount')
-    }
-
     render() {
-        logger.debug('CreatePost -> render')
-
         return <section className="create-post">
             <form onSubmit={event => {
                 event.preventDefault()
@@ -38,7 +26,7 @@ class CreatePost extends Component {
 
                     this.props.onPostCreated()
                 } catch (error) {
-                    showFeedback(error)
+                    utils.showFeedback(error)
                 }
             }}>
                 <label>Image</label>

@@ -1,17 +1,19 @@
-import { logger } from '../utils'
+/*
+import React from 'react'
+
+//const Component = React.Component
+// same as
+const { Component } = React
+*/
 
 import { Component } from 'react'
 
 class Landing extends Component {
     constructor() {
-        logger.debug('Landing')
-
         super()
     }
 
     render() {
-        logger.debug('Landing -> render')
-
         return <main>
             <h1>Landing</h1>
 

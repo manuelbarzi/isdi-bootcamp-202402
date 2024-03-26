@@ -1,4 +1,4 @@
-import { logger, showFeedback } from '../utils'
+import utils from '../utils'
 
 import logic from '../logic'
 
@@ -6,8 +6,6 @@ import { Component } from 'react'
 
 class PostList extends Component {
     constructor() {
-        logger.debug('PostList')
-
         super()
 
         try {
@@ -15,12 +13,12 @@ class PostList extends Component {
 
             this.state = { posts }
         } catch (error) {
-            showFeedback(error)
+            utils.showFeedback(error)
         }
     }
 
     componentWillReceiveProps(newProps) {
-        logger.debug('PostList -> componentWillReceiveProps', JSON.stringify(this.props), JSON.stringify(newProps))
+        console.log(this.props, newProps)
 
         if (newProps.refreshStamp !== this.props.stamp) {
             try {
@@ -28,14 +26,12 @@ class PostList extends Component {
 
                 this.setState({ posts })
             } catch (error) {
-                showFeedback(error)
+                utils.showFeedback(error)
             }
         }
     }
 
     render() {
-        logger.debug('PostList -> render')
-
         return <section>
             {this.state.posts.map(post => <article key={post.id}>
                 <h3>{post.author.username}</h3>

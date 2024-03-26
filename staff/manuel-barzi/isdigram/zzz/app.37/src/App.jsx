@@ -1,5 +1,3 @@
-import { logger } from './utils'
-
 import logic from './logic'
 
 import { Component } from 'react'
@@ -10,26 +8,12 @@ import Home from './pages/Home'
 
 class App extends Component {
   constructor() {
-    logger.debug('App')
-
     super()
 
     this.state = { view: logic.isUserLoggedIn() ? 'home' : 'landing' }
   }
 
-  setState(state) {
-    logger.debug('App -> setState', JSON.stringify(state))
-
-    super.setState(state)
-  }
-
-  componentDidMount() {
-    logger.debug('App -> componentDidMount')
-  }
-
   render() {
-    logger.debug('App -> render')
-
     if (this.state.view === 'landing')
       return <Landing onLoginClick={() => this.setState({ view: 'login' })} onRegisterClick={() => this.setState({ view: 'register' })} />
     else if (this.state.view === 'login')

@@ -1,4 +1,4 @@
-import { logger, showFeedback } from '../utils'
+import utils from '../utils'
 
 import logic from '../logic'
 
@@ -8,8 +8,6 @@ import CreatePost from '../components/CreatePost'
 
 class Home extends Component {
     constructor() {
-        logger.debug('Home')
-
         super()
 
         try {
@@ -18,21 +16,13 @@ class Home extends Component {
             this.user = user
 
         } catch (error) {
-            showFeedback(error)
+            utils.showFeedback(error)
         }
 
         this.state = { view: null, stamp: null }
     }
 
-    setState(state) {
-        logger.debug('Home -> setState', JSON.stringify(state))
-
-        super.setState(state)
-    }
-
     render() {
-        logger.debug('Home -> render')
-
         return <main className="main">
             <h1>Hello, {this.user.name}!</h1>
 

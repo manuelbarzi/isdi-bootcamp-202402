@@ -1,4 +1,4 @@
-import { logger, showFeedback } from '../utils'
+import utils from '../utils'
 
 import logic from '../logic'
 
@@ -6,14 +6,10 @@ import { Component } from 'react'
 
 class Register extends Component {
     constructor() {
-        logger.debug('Register')
-
         super()
     }
 
     render() {
-        logger.debug('Register -> render')
-
         return <main>
             <h1>Register</h1>
 
@@ -35,7 +31,7 @@ class Register extends Component {
 
                     this.props.onUserRegistered()
                 } catch (error) {
-                    showFeedback(error)
+                    utils.showFeedback(error)
                 }
             }}>
                 <label htmlFor="name">Name</label>
