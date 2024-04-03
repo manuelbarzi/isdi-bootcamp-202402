@@ -10,8 +10,38 @@
         "model": "600"
     },
     {
+        "id": "3450",
+        "brand": "fiat",
+        "model": "600 se"
+    },
+    {
         "id": "678",
         "brand": "vw",
         "model": "beetle"
+    },
+    {
+        "id": "901",
+        "brand": "fiat",
+        "model": "ducato"
+    },
+    {
+        "id": "234",
+        "brand": "porsche",
+        "model": "cayenne"
+    },
+    {
+        "id": "567",
+        "brand": "fiat",
+        "model": "punto"
+    },
+    {
+        "id": "890",
+        "brand": "vw",
+        "model": "golf"
+    },
+    {
+        "brand": "renault",
+        "model": "clio",
+        "id": "1712131387680"
     }
 ]

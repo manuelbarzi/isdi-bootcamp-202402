@@ -3,55 +3,27 @@ const fs = require('fs')
 
 const server = express()
 
-server.get('/', (req, res) => { // route handler, middleware, ... controller
-    fs.readFile('./index.html', 'utf8', (error, html) => {
-        if (error) {
-            res.status(500).send(`<!DOCTYPE html>
-                <html lang="en">
+const jsonBodyParser = express.json()
 
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>API</title>
-                </head>
+// ex: GET http://localhost:8080/cars/all
+// curl http://localhost:8080/cars/all
 
-                <body>
-                    <h1>Server Error! Go home, take a nap, and come back later!</h1>
-
-                    <p>${error.message}</p>
-                </body>
-
-                </html>`)
-
-            return
-        }
-
-        //res.status(200).send(html)        
-        res.send(html)
-    })
-})
-
-server.get('/cars', (req, res) => {
+server.get('/cars/all', (req, res) => {
     fs.readFile('./cars.json', 'utf8', (error, json) => {
         if (error) {
-            // res.status(500)
-            // res.setHeader('Content-Type', 'application/json')
-            // res.send(json)
-
             res.status(500).json({ error: error.constructor.name, message: error.message })
 
             return
         }
-
-        // res.status(200)
-        // res.setHeader('Content-Type', 'application/json')
-        // res.send(json)
 
         const cars = JSON.parse(json)
 
         res.json(cars)
     })
 })
+
+// ex: GET http://localhost:8080/cars/123
+// curl http://localhost:8080/cars/123
 
 server.get('/cars/:carId', (req, res) => {
     fs.readFile('./cars.json', 'utf8', (error, json) => {
@@ -63,12 +35,197 @@ server.get('/cars/:carId', (req, res) => {
 
         const cars = JSON.parse(json)
 
-        const car = cars.find(car => car.id === req.params.carId)
+        const { carId } = req.params
 
-        if (car)
-            res.json(car)
-        else
+        const car = cars.find(car => car.id === carId)
+
+        if (!car) {
             res.status(404).json(null)
+
+            return
+        }
+
+        res.json(car)
+    })
+})
+
+// ex: GET http://localhost:8080/cars?q=fi
+// curl 'http://localhost:8080/cars?q=fi'
+
+server.get('/cars', (req, res) => {
+    fs.readFile('./cars.json', 'utf8', (error, json) => {
+        if (error) {
+            res.status(500).json({ error: error.constructor.name, message: error.message })
+
+            return
+        }
+
+        const cars = JSON.parse(json)
+
+        const { q } = req.query
+
+        const filteredCars = cars.filter(car => car.brand.includes(q) || car.model.includes(q))
+
+        res.json(filteredCars)
+    })
+})
+
+// ex: POST {"brand":"renault","model":"laguna"} http://localhost:8080/cars
+// curl -X POST -H "Content-Type: application/json" -d '{"brand":"renault","model":"laguna"}' http://localhost:8080/cars -v
+
+server.post('/cars', jsonBodyParser, (req, res) => {
+    fs.readFile('./cars.json', 'utf8', (error, json) => {
+        if (error) {
+            res.status(500).json({ error: error.constructor.name, message: error.message })
+
+            return
+        }
+
+        const cars = JSON.parse(json)
+
+        //const { brand, model } = req.body
+        //const car = { brand, model }
+        const car = req.body
+
+        car.id = Date.now().toString()
+
+        cars.push(car)
+
+        const json2 = JSON.stringify(cars)
+
+        fs.writeFile('./cars.json', json2, error => {
+            if (error) {
+                res.status(500).json({ error: error.constructor.name, message: error.message })
+
+                return
+            }
+
+            res.status(201).send()
+        })
+    })
+})
+
+// ex: PATCH {"model":"clio"} http://localhost:8080/cars/1712131387680
+// curl -X PATCH -H "Content-Type: application/json" -d '{"model":"clio"}' http://localhost:8080/cars/1712131387680 -v
+// curl -X PATCH -H "Content-Type: application/json" -d '{"brand":"chevrolet","model":"camaro"}' http://localhost:8080/cars/1712131387680 -v
+
+server.patch('/cars/:carId', jsonBodyParser, (req, res) => {
+    fs.readFile('./cars.json', 'utf8', (error, json) => {
+        if (error) {
+            res.status(500).json({ error: error.constructor.name, message: error.message })
+
+            return
+        }
+
+        const { carId } = req.params
+
+        const cars = JSON.parse(json)
+
+        const { brand, model } = req.body
+
+        const car = cars.find(car => car.id === carId)
+
+        if (!car) {
+            res.status(404).send()
+
+            return
+        }
+
+        if (brand) car.brand = brand
+        if (model) car.model = model
+
+        const json2 = JSON.stringify(cars)
+
+        fs.writeFile('./cars.json', json2, error => {
+            if (error) {
+                res.status(500).json({ error: error.constructor.name, message: error.message })
+
+                return
+            }
+
+            res.status(204).send()
+        })
+    })
+})
+
+// ex: PUT {"brand":"chevrolet","model":"camaro"} http://localhost:8080/cars/1712131387680
+// curl -X PUT -H "Content-Type: application/json" -d '{"brand":"chevrolet","model":"camaro"}' http://localhost:8080/cars/1712131387680 -v
+
+server.put('/cars/:carId', jsonBodyParser, (req, res) => {
+    fs.readFile('./cars.json', 'utf8', (error, json) => {
+        if (error) {
+            res.status(500).json({ error: error.constructor.name, message: error.message })
+
+            return
+        }
+
+        const { carId } = req.params
+
+        const cars = JSON.parse(json)
+
+        const { brand, model } = req.body
+
+        const car = cars.find(car => car.id === carId)
+
+        if (!car) {
+            res.status(404).send()
+
+            return
+        }
+
+        car.brand = brand
+        car.model = model
+
+        const json2 = JSON.stringify(cars)
+
+        fs.writeFile('./cars.json', json2, error => {
+            if (error) {
+                res.status(500).json({ error: error.constructor.name, message: error.message })
+
+                return
+            }
+
+            res.status(204).send()
+        })
+    })
+})
+
+// ex: DELETE http://localhost:8080/cars/1712131387680
+// curl -X DELETE http://localhost:8080/cars/1712131387680 -v
+
+server.delete('/cars/:carId', (req, res) => {
+    fs.readFile('./cars.json', 'utf8', (error, json) => {
+        if (error) {
+            res.status(500).json({ error: error.constructor.name, message: error.message })
+
+            return
+        }
+
+        const { carId } = req.params
+
+        const cars = JSON.parse(json)
+
+        const carIndex = cars.findIndex(car => car.id === carId)
+
+        if (carIndex < 0) {
+            res.status(404).send()
+
+            return
+        }
+
+        cars.splice(carIndex, 1)
+
+        const json2 = JSON.stringify(cars)
+
+        fs.writeFile('./cars.json', json2, error => {
+            if (error) {
+                res.status(500).json({ error: error.constructor.name, message: error.message })
+
+                return
+            }
+
+            res.status(204).send()
+        })
     })
 })
 
