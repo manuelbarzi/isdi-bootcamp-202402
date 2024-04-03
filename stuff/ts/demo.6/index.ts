@@ -21,14 +21,13 @@ user = {
 
 users.push(user)
 
-// type OtherUser = {
-//     fullname: string
-//     ageNow: number
-// }
+type OtherUser = {
+    fullname: string
+    ageNow: number
+}
 
 let otherUser
-// let otherUser: any
-// let otherUser: OtherUser
+//let otherUser: OtherUser
 
 otherUser = {
     fullname: 'James Hook',
