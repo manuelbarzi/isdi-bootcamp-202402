@@ -1,11 +1,6 @@
 import { logger, showFeedback } from '../utils'
 
-import CancelButton from './library/CancelButton'
-
 import logic from '../logic'
-import SubmitButton from './library/SubmitButton'
-
-import './EditPost.sass'
 
 function EditPost(props) {
     const handleSubmit = event => {
@@ -37,10 +32,10 @@ function EditPost(props) {
             <label>Text</label>
             <input id="text" type="text" defaultValue={props.post.text} />
 
-            <SubmitButton>Save</SubmitButton>
+            <button className="round-button submit-button" type="submit">Edit</button>
         </form>
 
-        <CancelButton onClick={handleCancelClick} />
+        <button className="round-button cancel-button" onClick={handleCancelClick}>Cancel</button>
     </section>
 }
 

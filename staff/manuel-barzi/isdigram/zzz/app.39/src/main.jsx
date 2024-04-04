@@ -2,7 +2,7 @@ import { logger, Logger } from './utils'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import './index.sass'
+import './index.css'
 
 logger.level = Logger.DEBUG
 

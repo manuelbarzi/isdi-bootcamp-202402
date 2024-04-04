@@ -9,7 +9,7 @@ import EditPost from '../components/EditPost'
 
 class Home extends Component {
     constructor() {
-        logger.debug('Home constructor')
+        logger.debug('Home')
 
         super()
 

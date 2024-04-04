@@ -10,7 +10,7 @@ import Home from './pages/Home'
 
 class App extends Component {
   constructor() {
-    logger.debug('App -> constructor')
+    logger.debug('App')
 
     super()
 

@@ -7,7 +7,7 @@ import Post from './Post'
 
 class PostList extends Component {
     constructor() {
-        logger.debug('PostList -> constructor')
+        logger.debug('PostList')
 
         super()
 
