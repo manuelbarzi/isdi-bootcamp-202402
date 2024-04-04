@@ -1,6 +1,6 @@
 import { writeFile, readFile } from 'fs'
 
-import Collection from './Collection.ts'
+import Collection from './Collection'
 
 import { expect } from 'chai'
 
