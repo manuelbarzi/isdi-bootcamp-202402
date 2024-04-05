@@ -73,7 +73,7 @@ class Home extends Component {
                 <button onClick={this.handleLogoutClick}>🚪</button>
             </nav>
 
-            {/*<PostList stamp={this.state.stamp} onEditPostClick={this.handleEditPostClick} />*/}
+            <PostList stamp={this.state.stamp} onEditPostClick={this.handleEditPostClick} />
 
             {this.state.view === 'create-post' && <CreatePost onCancelClick={this.handleCreatePostCancelClick} onPostCreated={this.handlePostCreated} />}
 

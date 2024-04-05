@@ -261,16 +261,40 @@ function createPost(image, text) {
     db.posts.insertOne(post)
 }
 
-function retrievePosts() {
-    const posts = db.posts.getAll()
+function retrievePosts(callback) {
+    validateCallback(callback)
 
-    posts.forEach(function (post) {
-        const user = db.users.findOne(user => user.id === post.author)
+    var xhr = new XMLHttpRequest
 
-        post.author = { id: user.id, username: user.username }
-    })
+    xhr.onload = function () {
+        const { status, responseText: json } = xhr
 
-    return posts.reverse()
+        if (status >= 500) {
+            callback(new Error('system error'))
+
+            return
+        } else if (status >= 400) { // 400 - 499
+            const { error, message } = JSON.parse(json)
+
+            const constructor = window[error]
+
+            callback(new constructor(message))
+        } else if (status >= 300) {
+            callback(new Error('system error'))
+
+            return
+        } else {
+            const posts = JSON.parse(json)
+
+            callback(null, posts)
+        }
+    }
+
+    xhr.open('GET', `http://localhost:8080/posts`)
+
+    xhr.setRequestHeader('Authorization', sessionStorage.userId)
+
+    xhr.send()
 }
 
 function removePost(postId) {
