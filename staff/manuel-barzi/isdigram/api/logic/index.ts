@@ -147,6 +147,8 @@ function retrieveUser(userId, callback) {
     })
 }
 
+// TODO next ...
+
 function logoutUser() {
     const user = db.users.findOne(user => user.id === sessionStorage.userId)
 
@@ -155,20 +157,6 @@ function logoutUser() {
     user.status = 'offline'
 
     db.users.updateOne(user)
-
-    delete sessionStorage.userId
-}
-
-function getLoggedInUserId() {
-    return sessionStorage.userId
-}
-
-function isUserLoggedIn() {
-    return !!sessionStorage.userId
-}
-
-function cleanUpLoggedInUserId() {
-    delete sessionStorage.userId
 }
 
 function retrieveUsersWithStatus() {
@@ -293,9 +281,6 @@ const logic = {
     loginUser,
     retrieveUser,
     logoutUser,
-    getLoggedInUserId,
-    isUserLoggedIn,
-    cleanUpLoggedInUserId,
 
     retrieveUsersWithStatus,
     sendMessageToUser,
