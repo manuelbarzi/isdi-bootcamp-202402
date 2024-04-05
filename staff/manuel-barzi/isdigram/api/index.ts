@@ -5,6 +5,14 @@ const api = express()
 
 const jsonBodyParser = express.json()
 
+api.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', '*')
+    res.setHeader('Access-Control-Allow-Headers', '*')
+
+    next()
+})
+
 api.post('/users', jsonBodyParser, (req, res) => {
     try {
         const { name, birthdate, email, username, password } = req.body
@@ -22,8 +30,6 @@ api.post('/users', jsonBodyParser, (req, res) => {
         res.status(400).json({ error: error.constructor.name, message: error.message })
     }
 })
-
-// TODO login user -> POST /users/auth
 
 api.post('/users/auth', jsonBodyParser, (req, res) => {
     try {
@@ -43,7 +49,23 @@ api.post('/users/auth', jsonBodyParser, (req, res) => {
     }
 })
 
-// TODO retrieve user -> GET /users
+api.get('/users/:userId', jsonBodyParser, (req, res) => {
+    try {
+        const { userId } = req.params
+
+        logic.retrieveUser(userId, (error, user) => {
+            if (error) {
+                res.status(400).json({ error: error.constructor.name, message: error.message })
+
+                return
+            }
+
+            res.json(user)
+        })
+    } catch (error) {
+        res.status(400).json({ error: error.constructor.name, message: error.message })
+    }
+})
 
 // TODO retrieve posts -> GET /posts
 

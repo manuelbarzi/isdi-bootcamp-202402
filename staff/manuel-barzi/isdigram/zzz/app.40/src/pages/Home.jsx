@@ -13,23 +13,16 @@ class Home extends Component {
 
         super()
 
-        this.state = { user: null, view: null, stamp: null, post: null }
-    }
-
-    componentDidMount() {
         try {
-            logic.retrieveUser((error, user) => {
-                if (error) {
-                    showFeedback(error)
+            const user = logic.retrieveUser()
 
-                    return
-                }
+            this.user = user
 
-                this.setState({ user })
-            })
         } catch (error) {
             showFeedback(error)
         }
+
+        this.state = { view: null, stamp: null, post: null }
     }
 
     setState(state) {
@@ -66,14 +59,14 @@ class Home extends Component {
         logger.debug('Home -> render')
 
         return <main className="main">
-            {this.state.user && <h1>Hello, {this.state.user.name}!</h1>}
+            <h1>Hello, {this.user.name}!</h1>
 
             <nav>
                 <button>💬</button>
                 <button onClick={this.handleLogoutClick}>🚪</button>
             </nav>
 
-            {/*<PostList stamp={this.state.stamp} onEditPostClick={this.handleEditPostClick} />*/}
+            <PostList stamp={this.state.stamp} onEditPostClick={this.handleEditPostClick} />
 
             {this.state.view === 'create-post' && <CreatePost onCancelClick={this.handleCreatePostCancelClick} onPostCreated={this.handlePostCreated} />}
 

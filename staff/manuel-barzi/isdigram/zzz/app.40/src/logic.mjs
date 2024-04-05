@@ -9,7 +9,7 @@ const URL_REGEX = /^(http|https):\/\//
 
 // helpers
 
-function validateText(text, explain = 'text', checkEmptySpaceInside) {
+function validateText(text, explain, checkEmptySpaceInside) {
     if (typeof text !== 'string') throw new TypeError(explain + ' ' + text + ' is not a string')
     if (!text.trim().length) throw new Error(explain + ' >' + text + '< is empty or blank')
 
@@ -17,146 +17,71 @@ function validateText(text, explain = 'text', checkEmptySpaceInside) {
         if (text.includes(' ')) throw new Error(explain + ' ' + text + ' has empty spaces')
 }
 
-function validateDate(date, explain = 'date') {
-    if (typeof date !== 'string') throw new TypeError(`${explain} is not a string`)
-    if (!DATE_REGEX.test(date)) throw new Error(`${explain} does not have a valid format`)
+function validateDate(date, explain) {
+    if (typeof date !== 'string') throw new TypeError(explain + ' ' + date + ' is not a string')
+    if (!DATE_REGEX.test(date)) throw new Error(explain + ' ' + date + ' does not have a valid format')
 }
 
-function validateEmail(email, explain = 'email') {
-    if (!EMAIL_REGEX.test(email)) throw new Error(`${explain} is not an email`)
+function validateEmail(email, explain) {
+    if (!EMAIL_REGEX.test(email)) throw new Error(explain + ' ' + email + ' is not an email')
 }
 
-function validatePassword(password, explain = 'password') {
-    if (!PASSWORD_REGEX.test(password)) throw new Error(`${explain} is not valid`)
+function validatePassword(password, explain) {
+    if (!PASSWORD_REGEX.test(password)) throw new Error(explain + ' ' + password + ' is not acceptable')
 }
 
-function validateUrl(url, explain = 'url') {
-    if (!URL_REGEX.test(url)) throw new Error(`${explain} is not a url`)
-}
-
-function validateCallback(callback, explain = 'callback') {
-    if (typeof callback !== 'function') throw new TypeError(`${explain} is not a function`)
+function validateUrl(url, explain) {
+    if (!URL_REGEX.test(url)) throw new Error(explain + ' ' + url + ' is not an url')
 }
 
 // logic
 
-function registerUser(name, birthdate, email, username, password, callback) {
+function registerUser(name, birthdate, email, username, password) {
     validateText(name, 'name')
     validateDate(birthdate, 'birthdate')
-    validateEmail(email)
+    validateEmail(email, 'email')
     validateText(username, 'username', true)
-    validatePassword(password)
-    validateCallback(callback)
+    validatePassword(password, 'password')
 
-    var xhr = new XMLHttpRequest
+    let user = db.users.findOne(user => user.email === email || user.username === username)
 
-    xhr.onload = function () {
-        const { status, responseText: json } = xhr
+    if (user) throw new Error('user already exists')
 
-        if (status >= 500) {
-            callback(new Error('system error'))
-
-            return
-        } else if (status >= 400) { // 400 - 499
-            const { error, message } = JSON.parse(json)
-
-            const constructor = window[error]
-
-            callback(new constructor(message))
-        } else if (status >= 300) {
-            callback(new Error('system error'))
-
-            return
-        } else callback(null)
+    user = {
+        name: name.trim(),
+        birthdate: birthdate,
+        email: email,
+        username: username,
+        password: password,
+        status: 'offline',
     }
 
-    xhr.open('POST', 'http://localhost:8080/users')
-
-    xhr.setRequestHeader('Content-Type', 'application/json')
-
-    const user = { name, birthdate, email, username, password }
-
-    const json = JSON.stringify(user)
-
-    xhr.send(json)
+    db.users.insertOne(user)
 }
 
-function loginUser(username, password, callback) {
+function loginUser(username, password) {
     validateText(username, 'username', true)
-    validatePassword(password)
-    validateCallback(callback)
+    validatePassword(password, 'password')
 
-    var xhr = new XMLHttpRequest
+    const user = db.users.findOne(user => user.username === username)
 
-    xhr.onload = function () {
-        const { status, responseText: json } = xhr
+    if (!user) throw new Error('user not found')
 
-        if (status >= 500) {
-            callback(new Error('system error'))
+    if (user.password !== password) throw new Error('wrong password')
 
-            return
-        } else if (status >= 400) { // 400 - 499
-            const { error, message } = JSON.parse(json)
+    user.status = 'online'
 
-            const constructor = window[error]
+    db.users.updateOne(user)
 
-            callback(new constructor(message))
-        } else if (status >= 300) {
-            callback(new Error('system error'))
-
-            return
-        } else {
-            const userId = JSON.parse(json)
-
-            sessionStorage.userId = userId
-
-            callback(null)
-        }
-    }
-
-    xhr.open('POST', 'http://localhost:8080/users/auth')
-
-    xhr.setRequestHeader('Content-Type', 'application/json')
-
-    const user = { username, password }
-
-    const json = JSON.stringify(user)
-
-    xhr.send(json)
+    sessionStorage.userId = user.id
 }
 
-function retrieveUser(callback) {
-    validateCallback(callback)
+function retrieveUser() {
+    const user = db.users.findOne(user => user.id === sessionStorage.userId)
 
-    var xhr = new XMLHttpRequest
+    if (!user) throw new Error('user not found')
 
-    xhr.onload = function () {
-        const { status, responseText: json } = xhr
-
-        if (status >= 500) {
-            callback(new Error('system error'))
-
-            return
-        } else if (status >= 400) { // 400 - 499
-            const { error, message } = JSON.parse(json)
-
-            const constructor = window[error]
-
-            callback(new constructor(message))
-        } else if (status >= 300) {
-            callback(new Error('system error'))
-
-            return
-        } else {
-            const user = JSON.parse(json)
-
-            callback(null, user)
-        }
-    }
-
-    xhr.open('GET', `http://localhost:8080/users/${sessionStorage.userId}`)
-
-    xhr.send()
+    return user
 }
 
 function logoutUser() {
