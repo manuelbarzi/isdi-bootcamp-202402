@@ -2,19 +2,13 @@ import { logger, showFeedback } from '../utils'
 
 import logic from '../logic'
 
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import Post from './Post'
 
-class PostList extends Component {
-    constructor() {
-        logger.debug('PostList -> constructor')
+function PostList(props) {
+    const [posts, setPosts] = useState([])
 
-        super()
-
-        this.state = { posts: [] }
-    }
-
-    loadPosts() {
+    const loadPosts = () => {
         logger.debug('PostList -> loadPosts')
 
         try {
@@ -25,37 +19,39 @@ class PostList extends Component {
                     return
                 }
 
-                this.setState({ posts })
+                setPosts(posts)
             })
         } catch (error) {
             showFeedback(error)
         }
     }
 
-    componentWillReceiveProps(newProps) {
-        logger.debug('PostList -> componentWillReceiveProps', JSON.stringify(this.props), JSON.stringify(newProps))
+    // componentWillReceiveProps(newProps) {
+    //     logger.debug('PostList -> componentWillReceiveProps', JSON.stringify(props), JSON.stringify(newProps))
 
-        //if (newProps.stamp !== this.props.stamp) this.loadPosts()
-        newProps.stamp !== this.props.stamp && this.loadPosts()
-    }
+    //     //if (newProps.stamp !== props.stamp) loadPosts()
+    //     newProps.stamp !== props.stamp && this.loadPosts()
+    // }
 
-    componentDidMount() {
-        logger.debug('PostList -> componentDidMount')
+    // componentDidMount() {
+    //     logger.debug('PostList -> componentDidMount')
 
-        this.loadPosts()
-    }
+    //     this.loadPosts()
+    // }
 
-    handlePostDeleted = () => this.loadPosts()
+    useEffect(() => {
+        loadPosts()
+    }, [props.stamp])
 
-    handleEditClick = post => this.props.onEditPostClick(post)
+    const handlePostDeleted = () => loadPosts()
 
-    render() {
-        logger.debug('PostList -> render')
+    const handleEditClick = post => props.onEditPostClick(post)
 
-        return <section>
-            {this.state.posts.map(post => <Post item={post} onEditClick={this.handleEditClick} onDeleted={this.handlePostDeleted} />)}
-        </section>
-    }
+    logger.debug('PostList -> render')
+
+    return <section>
+        {posts.map(post => <Post key={post.id} item={post} onEditClick={handleEditClick} onDeleted={handlePostDeleted} />)}
+    </section>
 }
 
 export default PostList

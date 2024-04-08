@@ -21,7 +21,7 @@ function Post(props) {
 
     const { item: post } = props
 
-    return <article>
+    return <article key={post.id}>
         <h3>{post.author.username}</h3>
 
         <img src={post.image} />

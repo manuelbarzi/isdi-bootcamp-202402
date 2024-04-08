@@ -387,6 +387,85 @@ describe('logic', () => {
                 })
             })
         })
+
+        it('fails orphan post', done => {
+            db.users.deleteAll(error => {
+                if (error) {
+                    done(error)
+
+                    return
+                }
+
+                db.posts.deleteAll(error => {
+                    if (error) {
+                        done(error)
+
+                        return
+                    }
+
+                    db.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' }, (error, insertedUserId) => {
+                        if (error) {
+                            done(error)
+
+                            return
+                        }
+
+                        const insertedPosts = []
+
+                        let count = 1
+
+                        const insertedPost1 = { author: insertedUserId, image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
+
+                        db.posts.insertOne(insertedPost1, (error, insertedPostId1) => {
+                            if (error) {
+                                done(error)
+
+                                return
+                            }
+
+                            insertedPosts.push(insertedPost1)
+
+                            count++
+
+                            const insertedPost2 = { author: insertedUserId, image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
+
+                            db.posts.insertOne(insertedPost2, (error, insertedPostId2) => {
+                                if (error) {
+                                    done(error)
+
+                                    return
+                                }
+
+                                insertedPosts.push(insertedPost2)
+
+                                count++
+
+                                const insertedPost3 = { author: 'unknown-user-id', image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
+
+                                db.posts.insertOne(insertedPost3, (error, insertedPostId3) => {
+                                    if (error) {
+                                        done(error)
+
+                                        return
+                                    }
+
+                                    insertedPosts.push(insertedPost3)
+
+                                    logic.retrievePosts(insertedUserId, (error, posts) => {
+                                        expect(error).to.be.instanceOf(Error)
+                                        expect(error.message).to.equal('user not found')
+
+                                        expect(posts).to.be.undefined
+
+                                        done()
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        })
     })
 
     // TODO test all methods
