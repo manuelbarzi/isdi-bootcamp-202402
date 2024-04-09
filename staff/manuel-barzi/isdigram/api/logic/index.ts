@@ -221,20 +221,29 @@ function retrieveMessagesWithUser(userId) {
     return []
 }
 
-function createPost(image, text) {
+function createPost(userId, image, text, callback) {
+    validateText(userId, 'userId', true)
     validateUrl(image, 'image')
-
     if (text)
         validateText(text, 'text')
+    validateCallback(callback)
 
     const post = {
-        author: sessionStorage.userId,
+        author: userId,
         image: image,
         text: text,
         date: new Date().toLocaleDateString('en-CA')
     }
 
-    db.posts.insertOne(post)
+    db.posts.insertOne(post, error => {
+        if (error) {
+            callback(error)
+
+            return
+        }
+
+        callback(null)
+    })
 }
 
 function retrievePosts(userId, callback) {
