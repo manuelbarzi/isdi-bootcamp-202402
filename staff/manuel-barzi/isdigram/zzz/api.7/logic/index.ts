@@ -1,5 +1,7 @@
 //@ts-nocheck
 
+import db from '../data/index.ts'
+
 // constants
 
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/
@@ -48,28 +50,38 @@ function registerUser(name, birthdate, email, username, password, callback) {
     validatePassword(password)
     validateCallback(callback)
 
-    this.users.findOne({ $or: [{ email }, { username }] })
-        .then(user => {
-            if (user) {
-                callback(new Error('user already exists'))
+    db.users.findOne(user => user.email === email || user.username === username, (error, user) => {
+        if (error) {
+            callback(error)
+
+            return
+        }
+
+        if (user) {
+            callback(new Error('user already exists'))
+
+            return
+        }
+
+        user = {
+            name: name.trim(),
+            birthdate: birthdate,
+            email: email,
+            username: username,
+            password: password,
+            status: 'offline',
+        }
+
+        db.users.insertOne(user, error => {
+            if (error) {
+                callback(error)
 
                 return
             }
 
-            user = {
-                name: name.trim(),
-                birthdate: birthdate,
-                email: email,
-                username: username,
-                password: password,
-                status: 'offline',
-            }
-
-            this.users.insertOne(user)
-                .then(() => callback(null))
-                .catch(error => callback(error))
+            callback(null)
         })
-        .catch(error => callback(error))
+    })
 }
 
 function loginUser(username, password, callback) {
@@ -320,8 +332,6 @@ function modifyPost(postId, text) {
 }
 
 const logic = {
-    users: null,
-
     registerUser,
     loginUser,
     retrieveUser,
