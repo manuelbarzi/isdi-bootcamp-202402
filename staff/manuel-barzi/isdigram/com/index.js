@@ -1,3 +1,3 @@
-import validate from './validate';
-import errors from './errors';
+import validate from './validate.js';
+import errors from './errors.js';
 export { validate, errors };
