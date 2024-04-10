@@ -1,73 +1,30 @@
 import db from './data/index.mjs'
-
-// constants
-
-const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/
-const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9]+$/
-const URL_REGEX = /^(http|https):\/\//
-
-// helpers
-
-function validateText(text, explain = 'text', checkEmptySpaceInside) {
-    if (typeof text !== 'string') throw new TypeError(explain + ' ' + text + ' is not a string')
-    if (!text.trim().length) throw new Error(explain + ' >' + text + '< is empty or blank')
-
-    if (checkEmptySpaceInside)
-        if (text.includes(' ')) throw new Error(explain + ' ' + text + ' has empty spaces')
-}
-
-function validateDate(date, explain = 'date') {
-    if (typeof date !== 'string') throw new TypeError(`${explain} is not a string`)
-    if (!DATE_REGEX.test(date)) throw new Error(`${explain} does not have a valid format`)
-}
-
-function validateEmail(email, explain = 'email') {
-    if (!EMAIL_REGEX.test(email)) throw new Error(`${explain} is not an email`)
-}
-
-function validatePassword(password, explain = 'password') {
-    if (!PASSWORD_REGEX.test(password)) throw new Error(`${explain} is not valid`)
-}
-
-function validateUrl(url, explain = 'url') {
-    if (!URL_REGEX.test(url)) throw new Error(`${explain} is not a url`)
-}
-
-function validateCallback(callback, explain = 'callback') {
-    if (typeof callback !== 'function') throw new TypeError(`${explain} is not a function`)
-}
-
-// logic
+import { validate, errors } from 'com'
 
 function registerUser(name, birthdate, email, username, password, callback) {
-    validateText(name, 'name')
-    validateDate(birthdate, 'birthdate')
-    validateEmail(email)
-    validateText(username, 'username', true)
-    validatePassword(password)
-    validateCallback(callback)
+    validate.text(name, 'name')
+    validate.date(birthdate, 'birthdate')
+    validate.email(email)
+    validate.text(username, 'username', true)
+    validate.password(password)
+    validate.callback(callback)
 
     var xhr = new XMLHttpRequest
 
     xhr.onload = function () {
         const { status, responseText: json } = xhr
 
-        if (status >= 500) {
-            callback(new Error('system error'))
-
-            return
-        } else if (status >= 400) { // 400 - 499
+        if (status !== 201) {
             const { error, message } = JSON.parse(json)
 
-            const constructor = window[error]
+            const constructor = errors[error]
 
             callback(new constructor(message))
-        } else if (status >= 300) {
-            callback(new Error('system error'))
 
             return
-        } else callback(null)
+        }
+
+        callback(null)
     }
 
     xhr.open('POST', 'http://localhost:8080/users')
@@ -82,9 +39,9 @@ function registerUser(name, birthdate, email, username, password, callback) {
 }
 
 function loginUser(username, password, callback) {
-    validateText(username, 'username', true)
-    validatePassword(password)
-    validateCallback(callback)
+    validate.text(username, 'username', true)
+    validate.password(password)
+    validate.callback(callback)
 
     var xhr = new XMLHttpRequest
 
@@ -126,7 +83,7 @@ function loginUser(username, password, callback) {
 }
 
 function retrieveUser(callback) {
-    validateCallback(callback)
+    validate.callback(callback)
 
     var xhr = new XMLHttpRequest
 
@@ -155,6 +112,8 @@ function retrieveUser(callback) {
     }
 
     xhr.open('GET', `http://localhost:8080/users/${sessionStorage.userId}`)
+
+    xhr.setRequestHeader('Authorization', sessionStorage.userId)
 
     xhr.send()
 }
@@ -208,8 +167,8 @@ function retrieveUsersWithStatus() {
 }
 
 function sendMessageToUser(userId, text) {
-    validateText(userId, 'userId', true)
-    validateText(text, 'text')
+    validate.text(userId, 'userId', true)
+    validate.text(text, 'text')
 
     // { id, users: [id, id], messages: [{ from: id, text, date }, { from: id, text, date }, ...] }
 
@@ -235,7 +194,7 @@ function sendMessageToUser(userId, text) {
 }
 
 function retrieveMessagesWithUser(userId) {
-    validateText(userId, 'userId', true)
+    validate.text(userId, 'userId', true)
 
     const chat = db.chats.findOne(chat => chat.users.includes(userId) && chat.users.includes(sessionStorage.userId))
 
@@ -248,8 +207,8 @@ function retrieveMessagesWithUser(userId) {
 function createPost(image, text, callback) {
     validateUrl(image, 'image')
     if (text)
-        validateText(text, 'text')
-    validateCallback(callback)
+        validate.text(text, 'text')
+    validate.callback(callback)
 
     var xhr = new XMLHttpRequest
 
@@ -288,7 +247,7 @@ function createPost(image, text, callback) {
 }
 
 function retrievePosts(callback) {
-    validateCallback(callback)
+    validate.callback(callback)
 
     var xhr = new XMLHttpRequest
 
@@ -324,7 +283,7 @@ function retrievePosts(callback) {
 }
 
 function removePost(postId) {
-    validateText(postId, 'postId', true)
+    validate.text(postId, 'postId', true)
 
     const post = db.posts.findOne(post => post.id === postId)
 
@@ -336,8 +295,8 @@ function removePost(postId) {
 }
 
 function modifyPost(postId, text) {
-    validateText(postId, 'postId', true)
-    validateText(text, 'text')
+    validate.text(postId, 'postId', true)
+    validate.text(text, 'text')
 
     const post = db.posts.findOne(post => post.id === postId)
 

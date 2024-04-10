@@ -21,6 +21,7 @@
     "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "com": "file:../com",
     "express": "^4.19.2",
     "mongodb": "^6.5.0"
   }

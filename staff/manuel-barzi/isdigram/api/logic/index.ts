@@ -1,57 +1,24 @@
-//@ts-nocheck
+// @ts-nocheck
 
-// constants
+import { ObjectId } from 'mongodb'
+import { validate } from 'com'
 
-const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/
-const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9]+$/
-const URL_REGEX = /^(http|https):\/\//
+import { errors } from 'com'
 
-// helpers
+const { DuplicityError, SystemError } = errors
 
-function validateText(text, explain, checkEmptySpaceInside?) {
-    if (typeof text !== 'string') throw new TypeError(explain + ' ' + text + ' is not a string')
-    if (!text.trim().length) throw new Error(explain + ' >' + text + '< is empty or blank')
-
-    if (checkEmptySpaceInside)
-        if (text.includes(' ')) throw new Error(explain + ' ' + text + ' has empty spaces')
-}
-
-function validateDate(date, explain) {
-    if (typeof date !== 'string') throw new TypeError(explain + ' ' + date + ' is not a string')
-    if (!DATE_REGEX.test(date)) throw new Error(explain + ' ' + date + ' does not have a valid format')
-}
-
-function validateEmail(email, explain = 'email') {
-    if (!EMAIL_REGEX.test(email)) throw new Error(`${explain} ${email} is not an email`)
-}
-
-function validatePassword(password, explain = 'password') {
-    if (!PASSWORD_REGEX.test(password)) throw new Error(`${explain} password is not acceptable`)
-}
-
-function validateUrl(url, explain) {
-    if (!URL_REGEX.test(url)) throw new Error(explain + ' ' + url + ' is not an url')
-}
-
-function validateCallback(callback, explain = 'callback') {
-    if (typeof callback !== 'function') throw new TypeError(`${explain} is not a function`)
-}
-
-// logic
-
-function registerUser(name, birthdate, email, username, password, callback) {
-    validateText(name, 'name')
-    validateDate(birthdate, 'birthdate')
-    validateEmail(email)
-    validateText(username, 'username', true)
-    validatePassword(password)
-    validateCallback(callback)
+function registerUser(name: string, birthdate: string, email: string, username: string, password: string, callback: Function) {
+    validate.text(name, 'name')
+    validate.date(birthdate, 'birthdate')
+    validate.email(email)
+    validate.text(username, 'username', true)
+    validate.password(password)
+    validate.callback(callback)
 
     this.users.findOne({ $or: [{ email }, { username }] })
         .then(user => {
             if (user) {
-                callback(new Error('user already exists'))
+                callback(new DuplicityError('user already exists'))
 
                 return
             }
@@ -67,72 +34,67 @@ function registerUser(name, birthdate, email, username, password, callback) {
 
             this.users.insertOne(user)
                 .then(() => callback(null))
+                .catch(error => callback(new SystemError(error.message)))
+        })
+        .catch(error => callback(new SystemError(error.message)))
+}
+
+function loginUser(username: string, password: string, callback: Function) {
+    validate.text(username, 'username', true)
+    validate.password(password)
+    validate.callback(callback)
+
+    this.users.findOne({ username })
+        .then(user => {
+            if (!user) {
+                callback(new Error('user not found'))
+
+                return
+            }
+
+            if (user.password !== password) {
+                callback(new Error('wrong password'))
+
+                return
+            }
+
+            this.users.updateOne({ _id: user._id }, { $set: { status: 'online' } })
+                .then(() => callback(null, user._id.toString()))
                 .catch(error => callback(error))
         })
         .catch(error => callback(error))
 }
 
-function loginUser(username, password, callback) {
-    validateText(username, 'username', true)
-    validatePassword(password)
-    validateCallback(callback)
+function retrieveUser(userId: string, targetUserId: string, callback: Function) {
+    validate.text(userId, 'userId', true)
+    validate.text(targetUserId, 'targetUserId', true)
+    validate.callback(callback)
 
-    db.users.findOne(user => user.username === username, (error, user) => {
-        if (error) {
-            callback(error)
-
-            return
-        }
-
-        if (!user) {
-            callback(new Error('user not found'))
-
-            return
-        }
-
-        if (user.password !== password) {
-            callback(new Error('wrong password'))
-
-            return
-        }
-
-        user.status = 'online'
-
-        db.users.updateOne(user2 => user2.id === user.id, user, error => {
-            if (error) {
-                callback(error)
+    this.users.findOne({ _id: new ObjectId(userId) })
+        .then(user => {
+            if (!user) {
+                callback(new Error('user not found'))
 
                 return
             }
 
-            callback(null, user.id)
+            this.users.findOne({ _id: new ObjectId(targetUserId) })
+                .then(user => {
+                    if (!user) {
+                        callback(new Error('target user not found'))
+
+                        return
+                    }
+
+                    delete user._id
+                    delete user.password
+                    delete user.status
+
+                    callback(null, user)
+                })
+                .catch(error => callback(error))
         })
-    })
-}
-
-function retrieveUser(userId, callback) {
-    validateText(userId, 'userId', true)
-    validateCallback(callback)
-
-    db.users.findOne(user => user.id === userId, (error, user) => {
-        if (error) {
-            callback(error)
-
-            return
-        }
-
-        if (!user) {
-            callback(new Error('user not found'))
-
-            return
-        }
-
-        delete user.id
-        delete user.password
-        delete user.status
-
-        callback(null, user)
-    })
+        .catch(error => callback(error))
 }
 
 // TODO next ...
@@ -172,8 +134,8 @@ function retrieveUsersWithStatus() {
 }
 
 function sendMessageToUser(userId, text) {
-    validateText(userId, 'userId', true)
-    validateText(text, 'text')
+    validate.text(userId, 'userId', true)
+    validate.text(text, 'text')
 
     // { id, users: [id, id], messages: [{ from: id, text, date }, { from: id, text, date }, ...] }
 
@@ -199,7 +161,7 @@ function sendMessageToUser(userId, text) {
 }
 
 function retrieveMessagesWithUser(userId) {
-    validateText(userId, 'userId', true)
+    validate.text(userId, 'userId', true)
 
     const chat = db.chats.findOne(chat => chat.users.includes(userId) && chat.users.includes(sessionStorage.userId))
 
@@ -210,11 +172,11 @@ function retrieveMessagesWithUser(userId) {
 }
 
 function createPost(userId, image, text, callback) {
-    validateText(userId, 'userId', true)
+    validate.text(userId, 'userId', true)
     validateUrl(image, 'image')
     if (text)
-        validateText(text, 'text')
-    validateCallback(callback)
+        validate.text(text, 'text')
+    validate.callback(callback)
 
     const post = {
         author: userId,
@@ -235,8 +197,8 @@ function createPost(userId, image, text, callback) {
 }
 
 function retrievePosts(userId, callback) {
-    validateText(userId, 'userId', true)
-    validateCallback(callback)
+    validate.text(userId, 'userId', true)
+    validate.callback(callback)
 
     db.users.findOne(user => user.id === userId, (error, user) => {
         if (error) {
@@ -293,7 +255,7 @@ function retrievePosts(userId, callback) {
 }
 
 function removePost(postId) {
-    validateText(postId, 'postId', true)
+    validate.text(postId, 'postId', true)
 
     const post = db.posts.findOne(post => post.id === postId)
 
@@ -305,8 +267,8 @@ function removePost(postId) {
 }
 
 function modifyPost(postId, text) {
-    validateText(postId, 'postId', true)
-    validateText(text, 'text')
+    validate.text(postId, 'postId', true)
+    validate.text(text, 'text')
 
     const post = db.posts.findOne(post => post.id === postId)
 
