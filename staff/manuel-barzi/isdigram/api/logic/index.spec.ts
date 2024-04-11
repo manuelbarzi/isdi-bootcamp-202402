@@ -1,6 +1,9 @@
 import { MongoClient, ObjectId } from 'mongodb'
 import logic from './index.ts'
 import { expect } from 'chai'
+import { errors } from 'com'
+
+const { DuplicityError, CredentialsError, NotFoundError } = errors
 
 describe('logic', () => {
     let client, users, posts
@@ -35,14 +38,18 @@ describe('logic', () => {
 
                         users.findOne({ username: 'peperoni' })
                             .then(user => {
-                                expect(!!user).to.be.true
-                                expect(user.name).to.equal('Pepe Roni')
-                                expect(user.birthdate).to.equal('2000-01-01')
-                                expect(user.email).to.equal('pepe@roni.com')
-                                expect(user.username).to.equal('peperoni')
-                                expect(user.password).to.equal('123qwe123')
+                                try {
+                                    expect(!!user).to.be.true
+                                    expect(user.name).to.equal('Pepe Roni')
+                                    expect(user.birthdate).to.equal('2000-01-01')
+                                    expect(user.email).to.equal('pepe@roni.com')
+                                    expect(user.username).to.equal('peperoni')
+                                    expect(user.password).to.equal('123qwe123')
 
-                                done()
+                                    done()
+                                } catch (error) {
+                                    done(error)
+                                }
                             })
                             .catch(done)
                     })
@@ -56,10 +63,14 @@ describe('logic', () => {
                     users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
                         .then(() => {
                             logic.registerUser('Pepe Roni', '2000-01-01', 'pepe@roni.com', 'peperoni', '123qwe123', error => {
-                                expect(error).to.be.instanceOf(Error)
-                                expect(error.message).to.equal('user already exists')
+                                try {
+                                    expect(error).to.be.instanceOf(DuplicityError)
+                                    expect(error.message).to.equal('user already exists')
 
-                                done()
+                                    done()
+                                } catch (error) {
+                                    done(error)
+                                }
                             })
                         })
                         .catch(done)
@@ -137,14 +148,22 @@ describe('logic', () => {
                                     return
                                 }
 
-                                expect(userId).to.be.a('string')
-                                expect(userId).to.equal(result.insertedId.toString())
+                                try {
+                                    expect(userId).to.be.a('string')
+                                    expect(userId).to.equal(result.insertedId.toString())
+                                } catch (error) {
+                                    done(error)
+                                }
 
                                 users.findOne({ _id: new ObjectId(userId) })
                                     .then(user => {
-                                        expect(user.status).to.equal('online')
+                                        try {
+                                            expect(user.status).to.equal('online')
 
-                                        done()
+                                            done()
+                                        } catch (error) {
+                                            done(error)
+                                        }
                                     })
                                     .catch(done)
                             })
@@ -160,11 +179,15 @@ describe('logic', () => {
                     users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
                         .then(() => {
                             logic.loginUser('peperoni', '123qwe123qwe', (error, userId) => {
-                                expect(error).to.be.instanceOf(Error)
-                                expect(error.message).to.equal('wrong password')
-                                expect(userId).to.be.undefined
+                                try {
+                                    expect(error).to.be.instanceOf(CredentialsError)
+                                    expect(error.message).to.equal('wrong password')
+                                    expect(userId).to.be.undefined
 
-                                done()
+                                    done()
+                                } catch (error) {
+                                    done(error)
+                                }
                             })
                         })
                         .catch(done)
@@ -178,12 +201,16 @@ describe('logic', () => {
                     users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
                         .then(() => {
                             logic.loginUser('peperoni2', '123qwe123', (error, userId) => {
-                                expect(error).to.be.instanceOf(Error)
-                                expect(error.message).to.equal('user not found')
+                                try {
+                                    expect(error).to.be.instanceOf(NotFoundError)
+                                    expect(error.message).to.equal('user not found')
 
-                                expect(userId).to.be.undefined
+                                    expect(userId).to.be.undefined
 
-                                done()
+                                    done()
+                                } catch (error) {
+                                    done(error)
+                                }
                             })
                         })
                         .catch(done)
@@ -209,14 +236,18 @@ describe('logic', () => {
                                             return
                                         }
 
-                                        expect(user.id).to.be.undefined
-                                        expect(user.username).to.equal('pepephone')
-                                        expect(user.email).to.equal('pepe@phone.com')
-                                        expect(user.birthdate).to.equal('2000-01-01')
-                                        expect(user.password).to.be.undefined
-                                        expect(user.status).to.be.undefined
+                                        try {
+                                            expect(user.id).to.be.undefined
+                                            expect(user.username).to.equal('pepephone')
+                                            expect(user.email).to.equal('pepe@phone.com')
+                                            expect(user.birthdate).to.equal('2000-01-01')
+                                            expect(user.password).to.be.undefined
+                                            expect(user.status).to.be.undefined
 
-                                        done()
+                                            done()
+                                        } catch (error) {
+                                            done(error)
+                                        }
                                     })
                                 })
                                 .catch(done)
@@ -234,12 +265,16 @@ describe('logic', () => {
                             users.insertOne({ name: 'Pepe Phone', birthdate: '2000-01-01', email: 'pepe@phone.com', username: 'pepephone', password: '123qwe123' })
                                 .then(result => {
                                     logic.retrieveUser(new ObjectId().toString(), result.insertedId.toString(), (error, user) => {
-                                        expect(error).to.be.instanceOf(Error)
-                                        expect(error.message).to.equal('user not found')
+                                        try {
+                                            expect(error).to.be.instanceOf(Error)
+                                            expect(error.message).to.equal('user not found')
 
-                                        expect(user).to.be.undefined
+                                            expect(user).to.be.undefined
 
-                                        done()
+                                            done()
+                                        } catch (error) {
+                                            done(error)
+                                        }
                                     })
                                 })
                                 .catch(done)
@@ -257,12 +292,16 @@ describe('logic', () => {
                             users.insertOne({ name: 'Pepe Phone', birthdate: '2000-01-01', email: 'pepe@phone.com', username: 'pepephone', password: '123qwe123' })
                                 .then(() => {
                                     logic.retrieveUser(result.insertedId.toString(), new ObjectId().toString(), (error, user) => {
-                                        expect(error).to.be.instanceOf(Error)
-                                        expect(error.message).to.equal('target user not found')
+                                        try {
+                                            expect(error).to.be.instanceOf(Error)
+                                            expect(error.message).to.equal('target user not found')
 
-                                        expect(user).to.be.undefined
+                                            expect(user).to.be.undefined
 
-                                        done()
+                                            done()
+                                        } catch (error) {
+                                            done(error)
+                                        }
                                     })
                                 })
                                 .catch(done)

@@ -3,7 +3,7 @@ import express from 'express'
 import logic from './logic/index.ts'
 import { errors } from 'com'
 
-const { ContentError, SystemError, DuplicityError } = errors
+const { ContentError, SystemError, DuplicityError, NotFoundError, CredentialsError } = errors
 
 const client = new MongoClient('mongodb://localhost:27017')
 
@@ -58,7 +58,14 @@ client.connect()
 
                 logic.loginUser(username, password, (error, userId) => {
                     if (error) {
-                        res.status(400).json({ error: error.constructor.name, message: error.message })
+                        if (error instanceof SystemError)
+                            res.status(500).json({ error: error.constructor.name, message: error.message })
+                        else if (error instanceof CredentialsError)
+                            res.status(401).json({ error: error.constructor.name, message: error.message })
+                        else if (error instanceof NotFoundError)
+                            res.status(404).json({ error: error.constructor.name, message: error.message })
+                        else
+                            res.status(500).json({ error: error.constructor.name, message: error.message })
 
                         return
                     }
@@ -66,7 +73,9 @@ client.connect()
                     res.json(userId)
                 })
             } catch (error) {
-                res.status(400).json({ error: error.constructor.name, message: error.message })
+                if (error instanceof TypeError || error instanceof ContentError)
+                    res.status(406).json({ error: error.constructor.name, message: error.message })
+                else res.status(500).json({ error: error.constructor.name, message: error.message })
             }
         })
 

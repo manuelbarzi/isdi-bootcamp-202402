@@ -3,7 +3,7 @@
 import { ObjectId } from 'mongodb'
 import { validate, errors } from 'com'
 
-const { DuplicityError, SystemError } = errors
+const { DuplicityError, SystemError, CredentialsError, NotFoundError } = errors
 
 function registerUser(name: string, birthdate: string, email: string, username: string, password: string, callback: Function) {
     validate.text(name, 'name')
@@ -45,22 +45,22 @@ function loginUser(username: string, password: string, callback: Function) {
     this.users.findOne({ username })
         .then(user => {
             if (!user) {
-                callback(new Error('user not found'))
+                callback(new NotFoundError('user not found'))
 
                 return
             }
 
             if (user.password !== password) {
-                callback(new Error('wrong password'))
+                callback(new CredentialsError('wrong password'))
 
                 return
             }
 
             this.users.updateOne({ _id: user._id }, { $set: { status: 'online' } })
                 .then(() => callback(null, user._id.toString()))
-                .catch(error => callback(error))
+                .catch(error => callback(new SystemError(error.message)))
         })
-        .catch(error => callback(error))
+        .catch(error => callback(new SystemError(error.message)))
 }
 
 function retrieveUser(userId: string, targetUserId: string, callback: Function) {
