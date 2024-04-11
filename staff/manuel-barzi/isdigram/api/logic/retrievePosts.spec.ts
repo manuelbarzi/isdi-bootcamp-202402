@@ -5,7 +5,7 @@ import { errors } from 'com'
 
 const { CredentialsError, NotFoundError } = errors
 
-describe('logic', () => {
+describe('retrievePosts', () => {
     let client, users, posts
 
     before(done => {
@@ -19,120 +19,95 @@ describe('logic', () => {
                 posts = db.collection('posts')
 
                 logic.users = users
+                logic.posts = posts
 
                 done()
             })
             .catch(done)
     })
 
-    // describe('retrievePosts', () => {
-    //     it('retrieves all posts for existing user', done => {
-    //         db.users.deleteAll(error => {
-    //             if (error) {
-    //                 done(error)
 
-    //                 return
-    //             }
+    it('retrieves all posts for existing user', done => {
+        users.deleteMany()
+            .then(() => {
+                posts.deleteMany()
+                    .then(() => {
+                        users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
+                            .then(result => {
+                                const insertedPosts = []
 
-    //             db.posts.deleteAll(error => {
-    //                 if (error) {
-    //                     done(error)
+                                let count = 1
 
-    //                     return
-    //                 }
+                                const insertedPost1 = { author: result.insertedId, image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
 
-    //                 db.users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' }, (error, insertedUserId) => {
-    //                     if (error) {
-    //                         done(error)
+                                posts.insertOne(insertedPost1)
+                                    .then(() => {
+                                        insertedPosts.push(insertedPost1)
 
-    //                         return
-    //                     }
+                                        count++
 
-    //                     const insertedPosts = []
+                                        const insertedPost2 = { author: result.insertedId, image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
 
-    //                     let count = 1
+                                        posts.insertOne(insertedPost2)
+                                            .then(() => {
+                                                insertedPosts.push(insertedPost2)
 
-    //                     const insertedPost1 = { author: insertedUserId, image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
+                                                count++
 
-    //                     db.posts.insertOne(insertedPost1, (error, insertedPostId1) => {
-    //                         if (error) {
-    //                             done(error)
+                                                const insertedPost3 = { author: result.insertedId, image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
 
-    //                             return
-    //                         }
+                                                posts.insertOne(insertedPost3)
+                                                    .then(() => {
+                                                        insertedPosts.push(insertedPost3)
 
-    //                         insertedPosts.push(insertedPost1)
+                                                        logic.retrievePosts(result.insertedId.toString(), (error, posts) => {
+                                                            if (error) {
+                                                                done(error)
 
-    //                         count++
+                                                                return
+                                                            }
 
-    //                         const insertedPost2 = { author: insertedUserId, image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
+                                                            expect(posts).to.have.lengthOf(3)
 
-    //                         db.posts.insertOne(insertedPost2, (error, insertedPostId2) => {
-    //                             if (error) {
-    //                                 done(error)
+                                                            const post1 = posts[2]
 
-    //                                 return
-    //                             }
+                                                            expect(post1.author.username).to.equal('peperoni')
+                                                            expect(post1.author.id).to.equal(result.insertedId.toString())
+                                                            expect(post1.image).to.equal(insertedPost1.image)
+                                                            expect(post1.text).to.equal(insertedPost1.text)
+                                                            expect(post1.date).to.equal(insertedPost1.date)
 
-    //                             insertedPosts.push(insertedPost2)
+                                                            const post2 = posts[1]
 
-    //                             count++
+                                                            expect(post2.author.username).to.equal('peperoni')
+                                                            expect(post2.author.id).to.equal(result.insertedId.toString())
+                                                            expect(post2.image).to.equal(insertedPost2.image)
+                                                            expect(post2.text).to.equal(insertedPost2.text)
+                                                            expect(post2.date).to.equal(insertedPost2.date)
 
-    //                             const insertedPost3 = { author: insertedUserId, image: `http://images.com/${count}`, text: `hello post ${count}`, date: new Date().toLocaleDateString('en-CA') }
+                                                            const post3 = posts[0]
 
-    //                             db.posts.insertOne(insertedPost3, (error, insertedPostId3) => {
-    //                                 if (error) {
-    //                                     done(error)
+                                                            expect(post3.author.username).to.equal('peperoni')
+                                                            expect(post3.author.id).to.equal(result.insertedId.toString())
+                                                            expect(post3.image).to.equal(insertedPost3.image)
+                                                            expect(post3.text).to.equal(insertedPost3.text)
+                                                            expect(post3.date).to.equal(insertedPost3.date)
 
-    //                                     return
-    //                                 }
-
-    //                                 insertedPosts.push(insertedPost3)
-
-    //                                 logic.retrievePosts(insertedUserId, (error, posts) => {
-    //                                     if (error) {
-    //                                         done(error)
-
-    //                                         return
-    //                                     }
-
-    //                                     //expect(posts).to.deep.equal(insertedPosts.reverse())
-
-    //                                     expect(posts).to.have.lengthOf(3)
-
-    //                                     const post1 = posts[2]
-
-    //                                     expect(post1.author.username).to.equal('peperoni')
-    //                                     expect(post1.author.id).to.equal(insertedUserId)
-    //                                     expect(post1.image).to.equal(insertedPost1.image)
-    //                                     expect(post1.text).to.equal(insertedPost1.text)
-    //                                     expect(post1.date).to.equal(insertedPost1.date)
-
-    //                                     const post2 = posts[1]
-
-    //                                     expect(post2.author.username).to.equal('peperoni')
-    //                                     expect(post2.author.id).to.equal(insertedUserId)
-    //                                     expect(post2.image).to.equal(insertedPost2.image)
-    //                                     expect(post2.text).to.equal(insertedPost2.text)
-    //                                     expect(post2.date).to.equal(insertedPost2.date)
-
-    //                                     const post3 = posts[0]
-
-    //                                     expect(post3.author.username).to.equal('peperoni')
-    //                                     expect(post3.author.id).to.equal(insertedUserId)
-    //                                     expect(post3.image).to.equal(insertedPost3.image)
-    //                                     expect(post3.text).to.equal(insertedPost3.text)
-    //                                     expect(post3.date).to.equal(insertedPost3.date)
-
-    //                                     done()
-    //                                 })
-    //                             })
-    //                         })
-    //                     })
-    //                 })
-    //             })
-    //         })
-    //     })
+                                                            done()
+                                                        })
+                                                    })
+                                                    .catch(done)
+                                            })
+                                            .catch(done)
+                                    })
+                                    .catch(done)
+                            })
+                            .catch(done)
+                    })
+                    .catch(done)
+            })
+            .catch(done)
+    })
 
     //     it('fails orphan post', done => {
     //         db.users.deleteAll(error => {

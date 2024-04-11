@@ -1,4 +1,6 @@
 function retrievePosts(userId, callback) {
+    callback(new Error('TODO implement me'))
+
     // validate.text(userId, 'userId', true)
     // validate.callback(callback)
 

@@ -2,6 +2,17 @@ import { MongoClient } from 'mongodb'
 import express from 'express'
 import logic from './logic/index.ts'
 import { errors } from 'com'
+import tracer from 'tracer'
+import colors from 'colors'
+
+const logger = tracer.colorConsole({
+    filters: {
+        debug: colors.green,
+        info: colors.blue,
+        warn: colors.yellow,
+        error: colors.red
+    }
+})
 
 const { ContentError, SystemError, DuplicityError, NotFoundError, CredentialsError } = errors
 
@@ -33,12 +44,15 @@ client.connect()
 
                 logic.registerUser(name, birthdate, email, username, password, error => {
                     if (error) {
-                        if (error instanceof SystemError)
+                        if (error instanceof SystemError) {
+                            logger.error(error.message)
+
                             res.status(500).json({ error: error.constructor.name, message: error.message })
-                        else if (error instanceof DuplicityError)
+                        } else if (error instanceof DuplicityError) {
+                            logger.warn(error.message)
+
                             res.status(409).json({ error: error.constructor.name, message: error.message })
-                        else
-                            res.status(500).json({ error: error.constructor.name, message: error.message })
+                        }
 
                         return
                     }
@@ -46,9 +60,15 @@ client.connect()
                     res.status(201).send()
                 })
             } catch (error) {
-                if (error instanceof TypeError || error instanceof ContentError)
+                if (error instanceof TypeError || error instanceof ContentError) {
+                    logger.warn(error.message)
+
                     res.status(406).json({ error: error.constructor.name, message: error.message })
-                else res.status(500).json({ error: error.constructor.name, message: error.message })
+                } else {
+                    logger.warn(error.message)
+
+                    res.status(500).json({ error: error.constructor.name, message: error.message })
+                }
             }
         })
 
@@ -58,14 +78,19 @@ client.connect()
 
                 logic.loginUser(username, password, (error, userId) => {
                     if (error) {
-                        if (error instanceof SystemError)
+                        if (error instanceof SystemError) {
+                            logger.error(error.message)
+
                             res.status(500).json({ error: error.constructor.name, message: error.message })
-                        else if (error instanceof CredentialsError)
+                        } else if (error instanceof CredentialsError) {
+                            logger.warn(error.message)
+
                             res.status(401).json({ error: error.constructor.name, message: error.message })
-                        else if (error instanceof NotFoundError)
+                        } else if (error instanceof NotFoundError) {
+                            logger.warn(error.message)
+
                             res.status(404).json({ error: error.constructor.name, message: error.message })
-                        else
-                            res.status(500).json({ error: error.constructor.name, message: error.message })
+                        }
 
                         return
                     }
@@ -73,9 +98,15 @@ client.connect()
                     res.json(userId)
                 })
             } catch (error) {
-                if (error instanceof TypeError || error instanceof ContentError)
+                if (error instanceof TypeError || error instanceof ContentError) {
+                    logger.warn(error.message)
+
                     res.status(406).json({ error: error.constructor.name, message: error.message })
-                else res.status(500).json({ error: error.constructor.name, message: error.message })
+                } else {
+                    logger.warn(error.message)
+
+                    res.status(500).json({ error: error.constructor.name, message: error.message })
+                }
             }
         })
 
@@ -87,7 +118,15 @@ client.connect()
 
                 logic.retrieveUser(userId, targetUserId, (error, user) => {
                     if (error) {
-                        res.status(400).json({ error: error.constructor.name, message: error.message })
+                        if (error instanceof SystemError) {
+                            logger.error(error.message)
+
+                            res.status(500).json({ error: error.constructor.name, message: error.message })
+                        } else if (error instanceof NotFoundError) {
+                            logger.warn(error.message)
+
+                            res.status(404).json({ error: error.constructor.name, message: error.message })
+                        }
 
                         return
                     }
@@ -95,7 +134,15 @@ client.connect()
                     res.json(user)
                 })
             } catch (error) {
-                res.status(400).json({ error: error.constructor.name, message: error.message })
+                if (error instanceof TypeError || error instanceof ContentError) {
+                    logger.warn(error.message)
+
+                    res.status(406).json({ error: error.constructor.name, message: error.message })
+                } else {
+                    logger.warn(error.message)
+
+                    res.status(500).json({ error: error.constructor.name, message: error.message })
+                }
             }
         })
 
@@ -141,6 +188,6 @@ client.connect()
 
         // ...
 
-        api.listen(8080, () => console.log('API listening on port 8080'))
+        api.listen(8080, () => logger.info('API listening on port 8080'))
     })
-    .catch(error => console.error(error))
+    .catch(error => logger.error(error))

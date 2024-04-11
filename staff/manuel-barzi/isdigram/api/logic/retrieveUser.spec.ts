@@ -69,7 +69,7 @@ describe('retrieveUser', () => {
                             .then(result => {
                                 logic.retrieveUser(new ObjectId().toString(), result.insertedId.toString(), (error, user) => {
                                     try {
-                                        expect(error).to.be.instanceOf(Error)
+                                        expect(error).to.be.instanceOf(NotFoundError)
                                         expect(error.message).to.equal('user not found')
 
                                         expect(user).to.be.undefined
@@ -87,7 +87,7 @@ describe('retrieveUser', () => {
             .catch(done)
     })
 
-    it('does no retrieve a non-existing taget user', done => {
+    it('does no retrieve a non-existing target user', done => {
         users.deleteMany()
             .then(() => {
                 users.insertOne({ name: 'Pepe Roni', birthdate: '2000-01-01', email: 'pepe@roni.com', username: 'peperoni', password: '123qwe123' })
@@ -96,7 +96,7 @@ describe('retrieveUser', () => {
                             .then(() => {
                                 logic.retrieveUser(result.insertedId.toString(), new ObjectId().toString(), (error, user) => {
                                     try {
-                                        expect(error).to.be.instanceOf(Error)
+                                        expect(error).to.be.instanceOf(NotFoundError)
                                         expect(error.message).to.equal('target user not found')
 
                                         expect(user).to.be.undefined
