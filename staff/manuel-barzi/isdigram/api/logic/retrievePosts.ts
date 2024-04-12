@@ -37,7 +37,7 @@ function retrievePosts(userId, callback) {
                                 delete post._id
 
                                 post.author = {
-                                    id: user.id,
+                                    id: user._id.toString(),
                                     username: user.username
                                 }
 
