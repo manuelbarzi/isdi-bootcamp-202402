@@ -1,12 +1,14 @@
 import { validate, errors } from 'com'
 
-
-function retrievePosts(callback) {
+function createPost(image, text, callback) {
+    validate.url(image, 'image')
+    if (text)
+        validate.text(text, 'text')
     validate.callback(callback)
 
     var xhr = new XMLHttpRequest
 
-    xhr.onload = function () {
+    xhr.onload = () => {
         const { status, responseText: json } = xhr
 
         if (status >= 500) {
@@ -16,7 +18,7 @@ function retrievePosts(callback) {
         } else if (status >= 400) { // 400 - 499
             const { error, message } = JSON.parse(json)
 
-            const constructor = errors[error]
+            const constructor = window[error]
 
             callback(new constructor(message))
         } else if (status >= 300) {
@@ -24,17 +26,20 @@ function retrievePosts(callback) {
 
             return
         } else {
-            const posts = JSON.parse(json)
-
-            callback(null, posts)
+            callback(null)
         }
     }
 
-    xhr.open('GET', `http://localhost:8080/posts`)
+    xhr.open('POST', 'http://localhost:8080/posts')
 
     xhr.setRequestHeader('Authorization', sessionStorage.userId)
+    xhr.setRequestHeader('Content-Type', 'application/json')
 
-    xhr.send()
+    const post = { image, text }
+
+    const json = JSON.stringify(post)
+
+    xhr.send(json)
 }
 
-export default retrievePosts
+export default createPost

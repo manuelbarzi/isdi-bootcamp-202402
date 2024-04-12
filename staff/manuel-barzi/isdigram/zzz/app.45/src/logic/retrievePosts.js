@@ -16,7 +16,7 @@ function retrievePosts(callback) {
         } else if (status >= 400) { // 400 - 499
             const { error, message } = JSON.parse(json)
 
-            const constructor = errors[error]
+            const constructor = window[error]
 
             callback(new constructor(message))
         } else if (status >= 300) {

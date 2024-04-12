@@ -1,7 +1,6 @@
 import { validate, errors } from 'com'
 
-
-function retrievePosts(callback) {
+function retrieveUser(callback) {
     validate.callback(callback)
 
     var xhr = new XMLHttpRequest
@@ -16,7 +15,7 @@ function retrievePosts(callback) {
         } else if (status >= 400) { // 400 - 499
             const { error, message } = JSON.parse(json)
 
-            const constructor = errors[error]
+            const constructor = window[error]
 
             callback(new constructor(message))
         } else if (status >= 300) {
@@ -24,17 +23,17 @@ function retrievePosts(callback) {
 
             return
         } else {
-            const posts = JSON.parse(json)
+            const user = JSON.parse(json)
 
-            callback(null, posts)
+            callback(null, user)
         }
     }
 
-    xhr.open('GET', `http://localhost:8080/posts`)
+    xhr.open('GET', `http://localhost:8080/users/${sessionStorage.userId}`)
 
     xhr.setRequestHeader('Authorization', sessionStorage.userId)
 
     xhr.send()
 }
 
-export default retrievePosts
+export default retrieveUser

@@ -26,6 +26,19 @@ function PostList(props) {
         }
     }
 
+    // componentWillReceiveProps(newProps) {
+    //     logger.debug('PostList -> componentWillReceiveProps', JSON.stringify(props), JSON.stringify(newProps))
+
+    //     //if (newProps.stamp !== props.stamp) loadPosts()
+    //     newProps.stamp !== props.stamp && this.loadPosts()
+    // }
+
+    // componentDidMount() {
+    //     logger.debug('PostList -> componentDidMount')
+
+    //     this.loadPosts()
+    // }
+
     useEffect(() => {
         loadPosts()
     }, [props.stamp])
