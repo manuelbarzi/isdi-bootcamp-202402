@@ -1,8 +1,16 @@
-import mongoose from 'mongoose'
+import mongoose, { ObjectId } from 'mongoose'
 
 const { Schema, model } = mongoose
 
 const { Types: { ObjectId } } = Schema
+
+type UserType = {
+    name: string
+    birthdate: Date
+    email: string
+    username: string
+    password: string
+}
 
 
 const user = new Schema({
@@ -30,6 +38,13 @@ const user = new Schema({
     }
 })
 
+type PostType = {
+    author: ObjectId
+    image: string
+    text: string
+    date: Date
+}
+
 const post = new Schema({
     author: {
         type: ObjectId,
@@ -49,10 +64,12 @@ const post = new Schema({
     }
 })
 
-const User = model('User', user)
-const Post = model('Post', post)
+const User = model<UserType>('User', user)
+const Post = model<PostType>('Post', post)
 
 export {
+    UserType,
     User,
+    PostType,
     Post
 }
