@@ -9,6 +9,9 @@ import modifyPost from './modifyPost.ts'
 
 
 const logic = {
+    users: null,
+    posts: null,
+
     registerUser,
     authenticateUser,
     retrieveUser,
