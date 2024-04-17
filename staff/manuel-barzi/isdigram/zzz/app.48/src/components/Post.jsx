@@ -1,7 +1,5 @@
 import { logger, showFeedback } from '../utils'
 
-import { Link } from 'react-router-dom'
-
 import logic from '../logic'
 
 function Post(props) {
@@ -18,12 +16,13 @@ function Post(props) {
 
     const handleEditClick = post => props.onEditClick(post)
 
+
     logger.debug('Post -> render')
 
     const { item: post } = props
 
     return <article>
-        <h3><Link to={`/profile/${post.author.username}`}>{post.author.username}</Link></h3>
+        <h3>{post.author.username}</h3>
 
         <img src={post.image} />
 

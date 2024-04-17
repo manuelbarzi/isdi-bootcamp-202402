@@ -7,9 +7,6 @@ import PostList from '../components/PostList'
 import CreatePost from '../components/CreatePost'
 import EditPost from '../components/EditPost'
 
-import { Routes, Route } from 'react-router-dom'
-import Profile from '../components/Profile'
-
 function Home(props) {
     const [user, setUser] = useState(null)
     const [view, setView] = useState(null)
@@ -73,10 +70,7 @@ function Home(props) {
         </header>
 
         <main className="my-[50px] px-[5vw]">
-            <Routes>
-                <Route path="/" element={<PostList stamp={stamp} onEditPostClick={handleEditPostClick} />} />
-                <Route path="/profile/:username" element={<Profile />} />
-            </Routes>
+            <PostList stamp={stamp} onEditPostClick={handleEditPostClick} />
 
             {view === 'create-post' && <CreatePost onCancelClick={handleCreatePostCancelClick} onPostCreated={handlePostCreated} />}
 

@@ -1,10 +1,12 @@
 import { logger, showFeedback } from '../utils'
 
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import logic from '../logic'
 
 function Post(props) {
+    const navigate = useNavigate()
+
     const handleDeleteClick = postId => {
         if (confirm('delete post?'))
             try {
@@ -18,12 +20,19 @@ function Post(props) {
 
     const handleEditClick = post => props.onEditClick(post)
 
+    const handleUsernameClick = event => {
+        event.preventDefault()
+
+        navigate(`/profile/${post.author.username}`)
+    }
+
+
     logger.debug('Post -> render')
 
     const { item: post } = props
 
     return <article>
-        <h3><Link to={`/profile/${post.author.username}`}>{post.author.username}</Link></h3>
+        <h3><a href="" onClick={handleUsernameClick}>{post.author.username}</a></h3>
 
         <img src={post.image} />
 

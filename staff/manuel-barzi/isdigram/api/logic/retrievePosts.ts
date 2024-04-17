@@ -27,7 +27,7 @@ function retrievePosts(userId): Promise<[{ id: string, author: { id: string, use
                         image,
                         text,
                         date
-                    }))
+                    })).reverse()
                 )
 
         })
