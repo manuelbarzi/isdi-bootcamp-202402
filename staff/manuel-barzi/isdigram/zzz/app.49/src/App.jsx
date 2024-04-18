@@ -5,7 +5,6 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
-import Feedback from './components/Feedback'
 
 function App() {
   const navigate = useNavigate()
@@ -23,7 +22,6 @@ function App() {
   logger.debug('App -> render')
 
   return <>
-    <Feedback message="hola mundo" level="level" />
     <Routes>
       <Route path="/login" element={logic.isUserLoggedIn() ? <Navigate to="/" /> : <Login onRegisterClick={handleRegisterClick} onUserLoggedIn={handleUserLoggedIn} />} />
       <Route path="/register" element={logic.isUserLoggedIn() ? <Navigate to="/" /> : <Register onLoginClick={handleLoginClick} onUserRegistered={handleLoginClick} />} />
