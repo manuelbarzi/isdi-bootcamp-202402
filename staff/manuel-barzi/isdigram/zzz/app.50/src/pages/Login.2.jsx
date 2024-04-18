@@ -1,11 +1,13 @@
+import { useContext } from 'react'
+
 import { logger } from '../utils'
 
 import logic from '../logic'
 
-import { useContext } from '../context'
+import { Context } from '../App'
 
 function Login({ onUserLoggedIn, onRegisterClick }) {
-    const { showFeedback } = useContext()
+    const { showFeedback } = useContext(Context)
 
     const handleSubmit = event => {
         event.preventDefault()

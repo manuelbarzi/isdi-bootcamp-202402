@@ -7,19 +7,18 @@ import logic from '../logic'
 import { useContext } from '../context'
 
 function Post({ item: post, onEditClick, onDeleted }) {
-    const { showFeedback, showConfirm } = useContext()
+    const { showFeedback } = useContext()
 
-    const handleDeleteClick = postId =>
-        showConfirm('delete post?', confirmed => {
-            if (confirmed)
-                try {
-                    logic.removePost(postId)
-                        .then(() => onDeleted())
-                        .catch(error => showFeedback(error.message, 'error'))
-                } catch (error) {
-                    showFeedback(error.message)
-                }
-        })
+    const handleDeleteClick = postId => {
+        if (confirm('delete post?'))
+            try {
+                logic.removePost(postId)
+                    .then(() => onDeleted())
+                    .catch(error => showFeedback(error.message, 'error'))
+            } catch (error) {
+                showFeedback(error.message)
+            }
+    }
 
     const handleEditClick = post => onEditClick(post)
 

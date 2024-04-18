@@ -1,12 +1,8 @@
-import { logger } from '../utils'
+import { logger, showFeedback } from '../utils'
 
 import logic from '../logic'
 
-import { useContext } from '../context'
-
-function Login({ onUserLoggedIn, onRegisterClick }) {
-    const { showFeedback } = useContext()
-
+function Login({ onUserLoggedIn, onRegisterClick, onFeedback }) {
     const handleSubmit = event => {
         event.preventDefault()
 
@@ -24,9 +20,9 @@ function Login({ onUserLoggedIn, onRegisterClick }) {
 
                     onUserLoggedIn()
                 })
-                .catch(error => showFeedback(error.message, 'error'))
+                .catch(error => onFeedback(error.message, 'error'))
         } catch (error) {
-            showFeedback(error.message)
+            onFeedback(error.message, 'error')
         }
     }
 
