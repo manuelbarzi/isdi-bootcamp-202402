@@ -1,3 +1,4 @@
+import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import express from 'express'
 import logic from './logic/index.ts'
@@ -5,6 +6,11 @@ import { errors } from 'com'
 import tracer from 'tracer'
 import colors from 'colors'
 import jwt from 'jsonwebtoken'
+import cors from 'cors'
+
+dotenv.config()
+
+const { MONGODB_URL, PORT, JWT_SECRET, JWT_EXP } = process.env
 
 const logger = tracer.colorConsole({
     filters: {
@@ -18,19 +24,13 @@ const logger = tracer.colorConsole({
 const { ContentError, SystemError, DuplicityError, NotFoundError, CredentialsError } = errors
 
 
-mongoose.connect('mongodb://localhost:27017/isdigram')
+mongoose.connect(MONGODB_URL)
     .then(() => {
         const api = express()
 
         const jsonBodyParser = express.json()
 
-        api.use((req, res, next) => {
-            res.setHeader('Access-Control-Allow-Origin', '*')
-            res.setHeader('Access-Control-Allow-Methods', '*')
-            res.setHeader('Access-Control-Allow-Headers', '*')
-
-            next()
-        })
+        api.use(cors())
 
         api.post('/users', jsonBodyParser, (req, res) => {
             try {
@@ -68,7 +68,7 @@ mongoose.connect('mongodb://localhost:27017/isdigram')
 
                 logic.authenticateUser(username, password)
                     .then(userId => {
-                        const token = jwt.sign({ sub: userId }, 'i killed kenny')
+                        const token = jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: JWT_EXP })
 
                         res.json(token)
                     })
@@ -106,7 +106,7 @@ mongoose.connect('mongodb://localhost:27017/isdigram')
 
                 const token = authorization.slice(7)
 
-                const { sub: userId } = jwt.verify(token, 'i killed kenny')
+                const { sub: userId } = jwt.verify(token, JWT_SECRET)
 
                 const { targetUserId } = req.params
 
@@ -142,7 +142,7 @@ mongoose.connect('mongodb://localhost:27017/isdigram')
 
                 const token = authorization.slice(7)
 
-                const { sub: userId } = jwt.verify(token, 'i killed kenny')
+                const { sub: userId } = jwt.verify(token, JWT_SECRET)
 
                 logic.retrievePosts(userId as string)
                     .then(posts => res.json(posts))
@@ -176,7 +176,7 @@ mongoose.connect('mongodb://localhost:27017/isdigram')
 
                 const token = authorization.slice(7)
 
-                const { sub: userId } = jwt.verify(token, 'i killed kenny')
+                const { sub: userId } = jwt.verify(token, JWT_SECRET)
 
                 const { image, text } = req.body
 
@@ -208,6 +208,6 @@ mongoose.connect('mongodb://localhost:27017/isdigram')
 
         // ...
 
-        api.listen(8080, () => logger.info('API listening on port 8080'))
+        api.listen(PORT, () => logger.info(`API listening on port ${PORT}`))
     })
     .catch(error => logger.error(error))
