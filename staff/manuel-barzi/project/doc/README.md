@@ -6,7 +6,9 @@ Manage food & drinks orders in restaurants ...
 
 ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTkydXNpY2c4cnIxdTNjczUxMTgxN3prb3QwampmeHV4M3Zianp5NSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/9VvburUVlHpuvOQ7ph/giphy.gif)
 
-## Functional
+## Functional Description
+
+### Use Cases
 
 - find places (map)
 - choose a place (in map)
@@ -24,7 +26,7 @@ v0.1
 
 [Figma](https://www.figma.com/file/cw8K38zpv36iQkjQA5fVXC/App?type=design&node-id=0-1&mode=design&t=RHFOp1rBhBeRDwEs-0)
 
-## Technical
+## Technical Description
 
 ### Modules
 
