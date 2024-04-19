@@ -4,6 +4,7 @@ function createPost(image, text) {
     validate.url(image, 'image')
     if (text)
         validate.text(text, 'text')
+    validate.token(sessionStorage.token)
 
     const post = { image, text }
 

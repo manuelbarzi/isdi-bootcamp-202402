@@ -10,6 +10,8 @@ import cors from 'cors'
 
 dotenv.config()
 
+const { TokenExpiredError } = jwt
+
 const { MONGODB_URL, PORT, JWT_SECRET, JWT_EXP } = process.env
 
 const logger = tracer.colorConsole({
@@ -21,7 +23,14 @@ const logger = tracer.colorConsole({
     }
 })
 
-const { ContentError, SystemError, DuplicityError, NotFoundError, CredentialsError } = errors
+const {
+    ContentError,
+    SystemError,
+    DuplicityError,
+    NotFoundError,
+    CredentialsError,
+    UnauthorizedError
+} = errors
 
 
 mongoose.connect(MONGODB_URL)
@@ -57,7 +66,7 @@ mongoose.connect(MONGODB_URL)
                 } else {
                     logger.warn(error.message)
 
-                    res.status(500).json({ error: error.constructor.name, message: error.message })
+                    res.status(500).json({ error: SystemError.name, message: error.message })
                 }
             }
         })
@@ -95,7 +104,7 @@ mongoose.connect(MONGODB_URL)
                 } else {
                     logger.warn(error.message)
 
-                    res.status(500).json({ error: error.constructor.name, message: error.message })
+                    res.status(500).json({ error: SystemError.name, message: error.message })
                 }
             }
         })
@@ -128,10 +137,14 @@ mongoose.connect(MONGODB_URL)
                     logger.warn(error.message)
 
                     res.status(406).json({ error: error.constructor.name, message: error.message })
+                } else if (error instanceof TokenExpiredError) {
+                    logger.warn(error.message)
+
+                    res.status(498).json({ error: UnauthorizedError.name, message: 'session expired' })
                 } else {
                     logger.warn(error.message)
 
-                    res.status(500).json({ error: error.constructor.name, message: error.message })
+                    res.status(500).json({ error: SystemError.name, message: error.message })
                 }
             }
         })
@@ -162,10 +175,14 @@ mongoose.connect(MONGODB_URL)
                     logger.warn(error.message)
 
                     res.status(406).json({ error: error.constructor.name, message: error.message })
+                } else if (error instanceof TokenExpiredError) {
+                    logger.warn(error.message)
+
+                    res.status(498).json({ error: UnauthorizedError.name, message: 'session expired' })
                 } else {
                     logger.warn(error.message)
 
-                    res.status(500).json({ error: error.constructor.name, message: error.message })
+                    res.status(500).json({ error: SystemError.name, message: error.message })
                 }
             }
         })
@@ -198,10 +215,14 @@ mongoose.connect(MONGODB_URL)
                     logger.warn(error.message)
 
                     res.status(406).json({ error: error.constructor.name, message: error.message })
+                } else if (error instanceof TokenExpiredError) {
+                    logger.warn(error.message)
+
+                    res.status(498).json({ error: UnauthorizedError.name, message: 'session expired' })
                 } else {
                     logger.warn(error.message)
 
-                    res.status(500).json({ error: error.constructor.name, message: error.message })
+                    res.status(500).json({ error: SystemError.name, message: error.message })
                 }
             }
         })

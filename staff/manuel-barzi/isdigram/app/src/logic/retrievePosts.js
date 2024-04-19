@@ -1,7 +1,9 @@
-import { errors } from 'com'
+import { validate, errors } from 'com'
 
 
 function retrievePosts() {
+    validate.token(sessionStorage.token)
+
     return fetch(`${import.meta.env.VITE_API_URL}/posts`, {
         headers: {
             'Authorization': `Bearer ${sessionStorage.token}`

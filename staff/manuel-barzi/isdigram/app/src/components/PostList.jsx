@@ -18,9 +18,9 @@ function PostList({ stamp, onEditPostClick }) {
         try {
             logic.retrievePosts()
                 .then(setPosts)
-                .catch(error => showFeedback(error.message, 'error'))
+                .catch(error => showFeedback(error, 'error'))
         } catch (error) {
-            showFeedback(error.message)
+            showFeedback(error)
         }
     }
 
